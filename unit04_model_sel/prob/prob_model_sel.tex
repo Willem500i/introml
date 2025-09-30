@@ -229,11 +229,34 @@ determine: (i) if the model class is linear; (ii) if there is no under-modeling;
 is no under-modeling, what is the true parameter?
 \begin{enumerate}[(a)]
   \item $f_0(x) = 1+2x$,  $f(x,\betabf) = \beta_0+\beta_1x+\beta_2x^2$
+  
+  \textbf{Solution:}
+  \begin{itemize}
+    \item[(i)] Linear: Yes, the model is linear in parameters $\betabf = (\beta_0, \beta_1, \beta_2)$.
+    \item[(ii)] Under-modeling: No, since $f_0(x) = 1+2x$ can be represented as $\beta_0+\beta_1x+\beta_2x^2$ with $\beta_2 = 0$.
+    \item[(iii)] True parameter: $\betabf_0 = (1, 2, 0)$.
+  \end{itemize}
+  
   \item $f_0(x) = 1 + 1/(2+3x)$, $f(x,a_0,a_1,b_0,b_1) = (a_0+a_1x)/(b_0+b_1 x)$.
+  
+  \textbf{Solution:}
+  \begin{itemize}
+    \item[(i)] Linear: No, the model is nonlinear in parameters due to the ratio form.
+    \item[(ii)] Under-modeling: No, we can rewrite $f_0(x) = 1 + \frac{1}{2+3x} = \frac{2+3x+1}{2+3x} = \frac{3+3x}{2+3x}$.
+    \item[(iii)] True parameter: $a_0 = 3, a_1 = 3, b_0 = 2, b_1 = 3$.
+  \end{itemize}
+  
   \item $f_0(x) = (x_1-x_2)^2$ and
 \[
-    f(\xbf,a,b_1,b_2,c_1,c_2) = a + b_1x_1 + b_2x_2 + c_{1}x_1^2 +  + c_{2}x_2^2.
+    f(\xbf,a,b_1,b_2,c_1,c_2) = a + b_1x_1 + b_2x_2 + c_{1}x_1^2 + c_{2}x_2^2.
 \]
+
+  \textbf{Solution:}
+  \begin{itemize}
+    \item[(i)] Linear: Yes, the model is linear in parameters.
+    \item[(ii)] Under-modeling: Yes, there is under-modeling. $f_0(x) = (x_1-x_2)^2 = x_1^2 - 2x_1x_2 + x_2^2$ contains a cross-term $x_1x_2$ that cannot be represented by the model class.
+    \item[(iii)] Not applicable since there is under-modeling.
+  \end{itemize}
 \end{enumerate}
 
 \item You want to fit an exponential model of the form,
@@ -255,6 +278,51 @@ write python code that, given vectors \pycode{u} and \pycode{y}:
 \item Selects the model with the lowest mean squared error. 
 \end{itemize}
 
+\textbf{Solution:}
+\begin{python}
+import numpy as np
+from sklearn.linear_model import LinearRegression
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import mean_squared_error
+
+# Split data into training and test (50-50 split)
+u_train, u_test, y_train, y_test = train_test_split(u, y, test_size=0.5, random_state=42)
+
+dtest = list(range(1, 11))  # [1, 2, ..., 10]
+best_mse = float('inf')
+best_d = None
+best_model = None
+
+for d in dtest:
+    # Create feature matrix for exponential model
+    # X has columns: [e^(-0*u/d), e^(-1*u/d), ..., e^(-d*u/d)]
+    X_train = np.zeros((len(u_train), d+1))
+    X_test = np.zeros((len(u_test), d+1))
+    
+    for j in range(d+1):
+        X_train[:, j] = np.exp(-j * u_train / d)
+        X_test[:, j] = np.exp(-j * u_test / d)
+    
+    # Fit linear regression model
+    model = LinearRegression()
+    model.fit(X_train, y_train)
+    
+    # Predict on test data
+    yhat_test = model.predict(X_test)
+    
+    # Calculate MSE
+    mse = mean_squared_error(y_test, yhat_test)
+    
+    # Keep track of best model
+    if mse < best_mse:
+        best_mse = mse
+        best_d = d
+        best_model = model
+
+print(f"Best model order: {best_d}")
+print(f"Best MSE: {best_mse}")
+\end{python}
+
 \item Suppose we want to fit a model,
 \[
     y \approx \yhat = f(x,\beta) = \beta x^2.
@@ -272,11 +340,52 @@ as a function of the test point $x$, true parameter $\beta_0$ and test data $x_i
 \begin{enumerate}[(a)]
 \item The training data has no noise: $y_i = f(x_i,\beta_0)$.
 
+\textbf{Solution:}
+Since $y_i = \beta_0 x_i^2$, we have:
+\[
+\widehat{\beta} = \frac{\sum_{i=1}^N \beta_0 x_i^2}{\sum_{i=1}^N x_i^2} = \beta_0
+\]
+Therefore:
+\[
+\mathrm{Bias}(x) = \Exp(\beta_0 x^2) - \beta_0 x^2 = 0
+\]
+
 \item The training data is $y_i = f(x_i,\beta_0) + \epsilon_i$ where 
 the noise is i.i.d.\  $\epsilon_i \sim {\mathcal N}(0,\sigma^2)$.
 
+\textbf{Solution:}
+Now $y_i = \beta_0 x_i^2 + \epsilon_i$, so:
+\[
+\widehat{\beta} = \frac{\sum_{i=1}^N (\beta_0 x_i^2 + \epsilon_i)}{\sum_{i=1}^N x_i^2} = \beta_0 + \frac{\sum_{i=1}^N \epsilon_i}{\sum_{i=1}^N x_i^2}
+\]
+Taking expectation:
+\[
+\Exp(\widehat{\beta}) = \beta_0 + \frac{\sum_{i=1}^N \Exp(\epsilon_i)}{\sum_{i=1}^N x_i^2} = \beta_0
+\]
+Therefore:
+\[
+\mathrm{Bias}(x) = \Exp(\widehat{\beta} x^2) - \beta_0 x^2 = \beta_0 x^2 - \beta_0 x^2 = 0
+\]
+
 \item The training data is $y_i = f(x_i+\epsilon_i,\beta_0)$ where
 the noise is i.i.d.\ $\epsilon_i \sim {\mathcal N}(0,\sigma^2)$.
+
+\textbf{Solution:}
+Now $y_i = \beta_0 (x_i + \epsilon_i)^2 = \beta_0(x_i^2 + 2x_i\epsilon_i + \epsilon_i^2)$, so:
+\[
+\widehat{\beta} = \frac{\sum_{i=1}^N \beta_0(x_i^2 + 2x_i\epsilon_i + \epsilon_i^2)}{\sum_{i=1}^N x_i^2}
+\]
+Taking expectation:
+\[
+\Exp(\widehat{\beta}) = \frac{\beta_0 \sum_{i=1}^N (x_i^2 + 2x_i\Exp(\epsilon_i) + \Exp(\epsilon_i^2))}{\sum_{i=1}^N x_i^2} = \frac{\beta_0 \sum_{i=1}^N (x_i^2 + \sigma^2)}{\sum_{i=1}^N x_i^2}
+\]
+\[
+= \beta_0 \left(1 + \frac{N\sigma^2}{\sum_{i=1}^N x_i^2}\right)
+\]
+Therefore:
+\[
+\mathrm{Bias}(x) = \beta_0 x^2 \left(1 + \frac{N\sigma^2}{\sum_{i=1}^N x_i^2}\right) - \beta_0 x^2 = \beta_0 x^2 \frac{N\sigma^2}{\sum_{i=1}^N x_i^2}
+\]
 
 \end{enumerate}
 
@@ -301,12 +410,64 @@ These expressions will  involve multiple steps.
 You do not need to simplify the equations.
 Just make sure you state clearly how one would compute $\betabfhat$ from the training values.
 
+\textbf{Solution:}
+The least-squares estimate is given by:
+\[
+\betabfhat = (\Xbf\tran\Xbf)^{-1}\Xbf\tran\ybf
+\]
+where:
+\[
+\Xbf = \begin{pmatrix}
+1 & x_1 \\
+1 & x_2 \\
+\vdots & \vdots \\
+1 & x_n
+\end{pmatrix}, \quad \ybf = \begin{pmatrix}
+y_1 \\
+y_2 \\
+\vdots \\
+y_n
+\end{pmatrix}
+\]
+
+Step-by-step computation:
+\begin{align}
+\Xbf\tran\Xbf &= \begin{pmatrix} n & \sum_{i=1}^n x_i \\ \sum_{i=1}^n x_i & \sum_{i=1}^n x_i^2 \end{pmatrix} \\
+\Xbf\tran\ybf &= \begin{pmatrix} \sum_{i=1}^n y_i \\ \sum_{i=1}^n x_i y_i \end{pmatrix} \\
+\betabfhat &= (\Xbf\tran\Xbf)^{-1}\Xbf\tran\ybf
+\end{align}
+
 \item Using the fact that $y_i=f_0(x_i)$ in the training data, write the expression for
 $\betabf = (\betahat_0,\betahat_1)$ in terms of the values $x_i$ and the true parameter
 values $\betabf_0$.
 Again, you do not need to simplify the equations.
 Just make sure you state clearly how one would compute $\betabfhat$ from the true
 parameter vector $\betabf_0$ and $\xbf$.
+
+\textbf{Solution:}
+Since $y_i = f_0(x_i) = \beta_{00} + \beta_{01}x_i + \beta_{02}x_i^2$, we have:
+\[
+\ybf = \begin{pmatrix}
+\beta_{00} + \beta_{01}x_1 + \beta_{02}x_1^2 \\
+\beta_{00} + \beta_{01}x_2 + \beta_{02}x_2^2 \\
+\vdots \\
+\beta_{00} + \beta_{01}x_n + \beta_{02}x_n^2
+\end{pmatrix}
+\]
+
+Then:
+\begin{align}
+\Xbf\tran\ybf &= \begin{pmatrix} 
+\sum_{i=1}^n (\beta_{00} + \beta_{01}x_i + \beta_{02}x_i^2) \\
+\sum_{i=1}^n x_i(\beta_{00} + \beta_{01}x_i + \beta_{02}x_i^2)
+\end{pmatrix} \\
+&= \begin{pmatrix}
+n\beta_{00} + \beta_{01}\sum_{i=1}^n x_i + \beta_{02}\sum_{i=1}^n x_i^2 \\
+\beta_{00}\sum_{i=1}^n x_i + \beta_{01}\sum_{i=1}^n x_i^2 + \beta_{02}\sum_{i=1}^n x_i^3
+\end{pmatrix}
+\end{align}
+
+And $\betabfhat = (\Xbf\tran\Xbf)^{-1}\Xbf\tran\ybf$ with the above expressions.
 
 \item
 Suppose that the true parameters are $\betabf_0=(1,2,-1)$ and
@@ -315,8 +476,71 @@ Write a short python program to compute the estimate parameters $\betabfhat$.
 Plot the estimated function $f(x,\betabfhat)$ and true function $f_0(x)$
  for $x \in [0,3]$.
 
+\textbf{Solution:}
+\begin{python}
+import numpy as np
+import matplotlib.pyplot as plt
+
+# True parameters
+beta_00, beta_01, beta_02 = 1, 2, -1
+
+# Training data: 10 points uniformly spaced in [0,1]
+x_train = np.linspace(0, 1, 10)
+y_train = beta_00 + beta_01*x_train + beta_02*x_train**2
+
+# Create design matrix for linear model
+X = np.column_stack([np.ones(len(x_train)), x_train])
+
+# Compute least squares estimate
+beta_hat = np.linalg.solve(X.T @ X, X.T @ y_train)
+print(f"Estimated parameters: beta_0 = {beta_hat[0]:.3f}, beta_1 = {beta_hat[1]:.3f}")
+
+# Plot for x in [0,3]
+x_plot = np.linspace(0, 3, 100)
+y_true = beta_00 + beta_01*x_plot + beta_02*x_plot**2
+y_estimated = beta_hat[0] + beta_hat[1]*x_plot
+
+plt.figure(figsize=(10, 6))
+plt.plot(x_plot, y_true, 'b-', label='True function $f_0(x)$', linewidth=2)
+plt.plot(x_plot, y_estimated, 'r--', label='Estimated function $f(x,\\hat{\\beta})$', linewidth=2)
+plt.scatter(x_train, y_train, color='black', s=50, label='Training data', zorder=5)
+plt.xlabel('x')
+plt.ylabel('y')
+plt.legend()
+plt.grid(True, alpha=0.3)
+plt.title('True vs Estimated Function')
+plt.show()
+\end{python}
+
 \item For what value $x$ in this range $x \in [0,3]$ is the bias
 $\mathrm{Bias}^2(x) = (f(x,\betabfhat)-f_0(x))^2$ largest?
+
+\textbf{Solution:}
+\begin{python}
+# Calculate squared bias
+bias_squared = (y_estimated - y_true)**2
+
+# Find maximum bias
+max_bias_idx = np.argmax(bias_squared)
+x_max_bias = x_plot[max_bias_idx]
+max_bias_value = bias_squared[max_bias_idx]
+
+print(f"Maximum squared bias occurs at x = {x_max_bias:.3f}")
+print(f"Maximum squared bias value = {max_bias_value:.3f}")
+
+# Plot squared bias
+plt.figure(figsize=(10, 6))
+plt.plot(x_plot, bias_squared, 'g-', linewidth=2)
+plt.axvline(x_max_bias, color='red', linestyle='--', alpha=0.7)
+plt.xlabel('x')
+plt.ylabel('Squared Bias')
+plt.title('Squared Bias vs x')
+plt.grid(True, alpha=0.3)
+plt.show()
+\end{python}
+
+The maximum squared bias typically occurs at $x = 3$ (the right endpoint) where the quadratic nature of the true function creates the largest deviation from the linear approximation.
+
 \end{enumerate}
 
 
@@ -337,7 +561,28 @@ but the dependence (slope) on the cancer volume is different for two types of ca
   for the predicted value $\hat{y}$ in terms of these variables for each of the three models above.
   For Model 3, you will want to use one-hot coding.
 
+  \textbf{Solution:}
+  Let $v$ = cancer volume, $a$ = patient age, and define indicator variables:
+  $I_1 = 1$ if cancer type I, 0 otherwise; $I_2 = 1$ if cancer type II, 0 otherwise.
+  
+  \textbf{Model 1:} $\hat{y} = \beta_0 + \beta_1 v$
+  
+  \textbf{Model 2:} $\hat{y} = \beta_0 + \beta_1 v + \beta_2 a$
+  
+  \textbf{Model 3:} $\hat{y} = \beta_0 + \beta_1 v \cdot I_1 + \beta_2 v \cdot I_2 + \beta_3 a$
+  
+  (Note: Model 3 allows different slopes for volume based on cancer type)
+
   \item What are the numbers of parameters in each model?  Which model is the most complex?
+
+  \textbf{Solution:}
+  \begin{itemize}
+    \item Model 1: 2 parameters ($\beta_0, \beta_1$)
+    \item Model 2: 3 parameters ($\beta_0, \beta_1, \beta_2$)
+    \item Model 3: 4 parameters ($\beta_0, \beta_1, \beta_2, \beta_3$)
+  \end{itemize}
+  
+  Model 3 is the most complex with 4 parameters.
 
   \item Since the models in part (a) are linear, given training data,
   we should have $\hat{\ybf} = \Abf\betabf$
@@ -357,6 +602,28 @@ $\vdots$ & $\vdots$ & $\vdots$ & $\vdots$  & $\vdots$  \\ \hline
 Based on this data, what would be the values of first three rows of the three
 $\Abf$ matrices be for the three models in part (a)?
 
+  \textbf{Solution:}
+  
+  \textbf{Model 1:} $\Abf_1 = \begin{pmatrix}
+  1 & 0.7 \\
+  1 & 1.3 \\
+  1 & 1.6
+  \end{pmatrix}$
+  
+  \textbf{Model 2:} $\Abf_2 = \begin{pmatrix}
+  1 & 0.7 & 55 \\
+  1 & 1.3 & 65 \\
+  1 & 1.6 & 70
+  \end{pmatrix}$
+  
+  \textbf{Model 3:} $\Abf_3 = \begin{pmatrix}
+  1 & 0.7 & 0 & 55 \\
+  1 & 0 & 1.3 & 65 \\
+  1 & 0 & 1.6 & 70
+  \end{pmatrix}$
+  
+  (Columns are: intercept, $v \cdot I_1$, $v \cdot I_2$, age)
+
   \item To evaluate the models, 10-fold cross validation is used with the following results.
 \begin{center}
 \begin{tabular}[h]{|c|c|c|c|c|} \hline
@@ -370,6 +637,33 @@ Model & Mean training  & Mean test      & Test RSS \\
 All RSS values are per sample, and the last column is the (biased)
 standard deviation -- not the standard error.
 Which model should be selected based on the ``one standard error rule"?
+
+  \textbf{Solution:}
+  First, we need to convert the standard deviation to standard error:
+  $\text{SE} = \frac{\text{std dev}}{\sqrt{10}}$ (since 10-fold CV)
+  
+  \begin{itemize}
+    \item Model 1: Mean test RSS = 2.01, SE = 0.03/$\sqrt{10}$ = 0.0095
+    \item Model 2: Mean test RSS = 0.72, SE = 0.04/$\sqrt{10}$ = 0.0126  
+    \item Model 3: Mean test RSS = 0.70, SE = 0.05/$\sqrt{10}$ = 0.0158
+  \end{itemize}
+  
+  The best model (lowest test RSS) is Model 3 with RSS = 0.70.
+  
+  One standard error rule: Select the simplest model within one SE of the best model.
+  
+  Upper bound for Model 3: 0.70 + 0.0158 = 0.7158
+  
+  Checking which models fall within this bound:
+  \begin{itemize}
+    \item Model 1: 2.01 > 0.7158 (not within one SE)
+    \item Model 2: 0.72 > 0.7158 (not within one SE)
+    \item Model 3: 0.70 < 0.7158 (best model)
+  \end{itemize}
+  
+  Only Model 3 falls within one standard error of the best model.
+  
+  Therefore, \textbf{Model 3} should be selected using the one standard error rule.
 
 \end{enumerate}
 
