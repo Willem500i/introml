@@ -218,7 +218,8 @@ Problems Unit 3:  Multiple Linear Regression}
 \date{}
 
 \maketitle
-
+Willem Neuefeind Lessig's Solutions
+9/17/25
 \begin{enumerate}
 
 \item An online retailer like Amazon wants to determine which products
@@ -228,24 +229,46 @@ Problems Unit 3:  Multiple Linear Regression}
 \begin{enumerate}[(a)]
 \item To formulate this as a machine learning problem, suggest
 a target variable that the online retailer could use.
+\begin{enumerate}
+    \item \textbf{likely\_to\_sell} is a binary variable
 
+        \item 0: $<50\%$ chance of selling
+        \item 1: $>= 50\%$ chance of selling
+\end{enumerate}
 \item For the predictors of the target variable, a data scientist
 suggests to combine the numeric score with frequency of occurrence
 of words that convey judgement like ``bad", ``good", and ``doesn't work."
 Describe a possible linear model for this relation.
+\begin{enumerate}
+    \item Logistic regression: \(P = \frac{1}{1+e^{-z}}\)
+    \item where \(z= \beta_0+\beta_1(Score 1-5)+\beta_2(bad\_freq)+\beta_3(good\_freq)+\beta_4(doesn't\_work\_freq)\)
+\end{enumerate}
 
 \item Now, suppose that
 some reviews have a numeric score from 1 to 5 and others have a score
 from 1 to 10.  How would change your features?
+\begin{enumerate}
+    \item Change \(\beta_1(Score 1-5)\) into \(\beta_1(Score0-1)\) and turn each score into a fraction /10 or /5
+\end{enumerate}
 
 \item Now suppose the reviews have either (a) a score from 1 to 5;
 (b) a rating that is simply good or bad; or (c) no numeric rating at all.
 How would you change your features?
-
+\begin{enumerate}
+    \item Replace \(\beta_1(Score 1-5)\) with \(\beta_1(Score 1-0)\). Set the score as either
+    \begin{enumerate}
+        \item The 1-5 score as a fraction
+        \item 0 for a bad rating 1 for a good rating
+        \item 0 if no rating
+    \end{enumerate}
+\end{enumerate}
 \item For the frequency of occurrence of a word such as ``good",
 which variable would you suggest to use as a predictor:
 (a) total number of reviews with the word ``good";
 or (b) fraction of reviews with the word ``good"?
+\begin{enumerate}
+    \item b, the proportion of reviews saying good is a much more accurate predictor
+\end{enumerate}
 \end{enumerate}
 
 \item Suppose we are given data:
@@ -257,12 +280,32 @@ $y_i$ &    1 & 4 & 3 & 7  \\ \hline
 \end{tabular}
 \begin{enumerate}[(a)]
 \item Write an equation for a linear model for $y$ in terms of $x_1$ and $x_2$.
-
+\(\hat{y}=\beta_0+\beta_1x_1+\beta_2x_2 + \epsilon\)
 \item Given the data compute the least-squares estimate for the parameters
 in the model.
+Normal Equations:\par
+\(\sum{y}=n\beta_0+\beta_1\sum{x_1}+\beta_2\sum{x_2}\)\par
+\(\sum{x_1y}=\beta_0\sum{x_1}+\beta_1\sum{x_1^2}+\beta_2\sum{x_1x_2}\)\par
+\(\sum{x_2y}=\beta_0\sum{x_2}+\beta_1\sum{x_1x_2}+\beta_2\sum{x_2^2}\)\par
+Solve for each variable\par
+\(n=4\)\par
+\(\sum{y} = 15\)\par
+\(\sum{x_{1i}} = 2\)\par
+\(\sum{x_{2i}} = 2\)\par
+\(\sum{x_{1i}^2} = 2\)\par
+\(\sum{x_{2i}^2} = 2\)\par
+\(\sum{x_1x_2} = 0*0+0*1+1*0+1*1=1\)\par
+\(\sum{x_1y} = 0*1+0*4+1*3+1*7=10\)\par
+\(\sum{x_2y} = 0*1+1*4+0*3+1*7=11\)\par
+Put it together\par
+\(15=4\beta_0+2\beta_1+2\beta_2\)\par
+\(10=2\beta_0+2\beta_1+1\beta_2\)\par
+\(11=2\beta_0+1\beta_1+2\beta_2\)\par
+\(\beta_0=0.75, \beta_1=2.5, \beta_2=3.5\)\par
+\(\hat{y}=0.75+2.5x_1+3.5x_2\)
+
 \end{enumerate}
 \end{center}
-
 
 \item Write each of the following models as transformed linear models.
 That is, find a parameter vector $\betabf$ in terms of the given parameters $a_i$
@@ -270,13 +313,58 @@ and a set basis functions of functions $\phibf(\xbf)$ such that $\hat{y}=\betabf
 Also, show how to recover the original parameters $a_i$ from the parameters $\beta_j$:
 \begin{enumerate}[(a)]
 \item $\hat{y} = (a_1x_1+a_2x_2)e^{-x_1-x_2}$.
+\begin{enumerate}
+    \item $\hat{y} = a_1\cdot(x_1e^{-x_1-x_2})+a_1\cdot(x_2e^{-x_1-x_2})$
+    \item $\boldsymbol{\beta} = \begin{pmatrix} \beta_1 \\ \beta_2\end{pmatrix}=\begin{pmatrix} a_1 \\ a_2\end{pmatrix}$
+    \item $\boldsymbol{\phi(x)} = \begin{pmatrix} \phi_1(x) \\ \phi_2(x)\end{pmatrix}=\begin{pmatrix}
+        x_1e^{-x_1-x_2}  \\ x_2e^{-x_1-x_2}
+    \end{pmatrix}$
+    \item $\hat{y}=\beta\tran\phi(x)=\beta_1(x_1e^{-x_1-x_2})+\beta_2(x_1e^{-x_1-x_2})$
+    \item to revert, $a_1=\beta_1,a_2=\beta_2$
+\end{enumerate}
 \item $\hat{y} = \begin{cases}
     a_1 + a_2x & \mbox{if } x < 1 \\
     a_3 + a_4x & \mbox{if } x \geq 1
     \end{cases}$
+    \begin{enumerate}
+        \item Use indicator functions
+        \item $I_1(x) = \begin{cases}
+    1 & \mbox{if } x < 1 \\
+    0 & \mbox{if } x \geq 1
+    \end{cases}$
+    \item $I_2(x) = \begin{cases}
+    0 & \mbox{if } x < 1 \\
+    1 & \mbox{if } x \geq 1
+    \end{cases}$
+    \item $\hat{y}=(a_1+a_2x)\cdot I_1(x)+(a_3+a_4x)\cdot I_2(x)$
+    \item $\hat{y}=a_1I_1(x)+a_2xI_1(x)+a_3 I_2(x)+a_4xI_2(x)$
+    \item $\boldsymbol{\beta} = \begin{pmatrix} \beta_1 \\ \beta_2\\\beta_3\\\beta_4\end{pmatrix}=\begin{pmatrix} a_1 \\ a_2\\a_3\\a_4\end{pmatrix}$
+    \item $\boldsymbol{\phi(x)} = \begin{pmatrix} \phi_1(x) \\ \phi_2(x)\\\phi_2(x)\\\phi_3(x)\end{pmatrix}=\begin{pmatrix}
+        I_1(x)\\xI_1(x)\\I_2(x)\\xI_2(x)
+    \end{pmatrix}$
+    \item $\hat{y}=\beta\tran\phi(x)=\beta_1I_1(x)+\beta_2xI_1(x)+\beta_3I_2(x)+\beta_4xI_2(x)$
+    \item to revert, $\begin{pmatrix} a_1 \\ a_2\\a_3\\a_4\end{pmatrix}=\begin{pmatrix} \beta_1 \\ \beta_2\\\beta_3\\\beta_4\end{pmatrix}$
+    \end{enumerate}
 \item $\hat{y} = (1+a_1x_1)e^{-x_2+a_2}$.
+\begin{enumerate}
+    \item $\hat{y}=e^{-x_2+a_2}+a_1x_1e^{-x_2+a_2}$
+    \item $\hat{y}=e^{-x_2}e^{a_2}+a_1x_1e^{-x_2}e^{a_2}$
+    \item $\beta=\begin{pmatrix}
+        \beta_1\\\beta_2
+    \end{pmatrix}=\begin{pmatrix}
+        e^{a_2}\\a_1e^{a_2}
+    \end{pmatrix}$
+    \item $\boldsymbol{\phi(x)} = \begin{pmatrix} \phi_1(x) \\ \phi_2(x)\end{pmatrix}=\begin{pmatrix}
+        e^{-x^2}  \\ x_1e^{-x_2}
+    \end{pmatrix}$
+    \item $\hat{y}=\beta\tran\phi(x)=\beta_1(e^{-x_2})+\beta_2(x_1e^{-x_2})$
+    \item to revert, $\begin{pmatrix}
+        a_2\\a_1
+    \end{pmatrix}=\begin{pmatrix}
+        \ln(\beta_1)\\\frac{\beta_2}{\beta_1}
+    \end{pmatrix}$ ($\beta_1 > 0$)
 \end{enumerate}
-
+\end{enumerate}
 \item An automobile engineer wants to model the relation
 between the accelerator control and the velocity of the car.
 The relation may not be simple since there is a lag in depressing
@@ -295,14 +383,18 @@ model.
 \begin{enumerate}[(a)]
 \item Describe a vector $\betabf$ with the unknown parameters.
 How many unknown parameters are there?
-
+\par$\beta=\begin{pmatrix}
+    a_1\\...\\a_M\\b_0\\...\\b_N
+\end{pmatrix}$ , total = $M + N + 1$
 \item Describe the matrix $\Abf$ and target vector $\ybf$ so that we can
 rewrite the model \eqref{eq:yxfilt} in matrix form,
 \[
     \ybf = \Abf \betabf + \epsilonbf.
 \]
 Your matrix $\Abf$ will have entries of $y_k$ and $x_k$ in it.
-
+\par$A=\begin{pmatrix}
+    y_{k-1}\\y_{k-2}\\...\\y_{k-M}\\x_k\\x_{k-1}\\...\\x_{k-N}
+\end{pmatrix}$
 \item (Graduate students only)
 Show that, for $T \gg N$ and $T \gg M$,
 the coefficients of $(1/T)\Abf\tran\Abf$ and $(1/T)\Abf\tran\ybf$
@@ -334,10 +426,17 @@ Specifically, rewrite the model \eqref{eq:xsincos} as
 $\xbf \approx \Abf\betabf$ for appropriate $\xbf$, $\Abf$ and $\betabf$.
 Then describe exactly how we obtain the coefficients $a_\ell$ and $b_\ell$
 from this model.
-
+\par
+$\mathbf{x} = \begin{pmatrix} x_0 \\ x_1 \\ x_2 \\ \vdots \\ x_{N-1} \end{pmatrix}$\par$\boldsymbol{\beta} = \begin{pmatrix} a_1 \\ b_1 \\ a_2 \\ b_2 \\ \vdots \\ a_L \\ b_L \end{pmatrix}$\par$A = \begin{pmatrix}
+\cos(\Omega_1 \cdot 0) & \sin(\Omega_1 \cdot 0) & \cdots & \cos(\Omega_L \cdot 0) & \sin(\Omega_L \cdot 0) \\
+\cos(\Omega_1 \cdot 1) & \sin(\Omega_1 \cdot 1) & \cdots & \cos(\Omega_L \cdot 1) & \sin(\Omega_L \cdot 1) \\
+\vdots & \vdots & \ddots & \vdots & \vdots \\
+\cos(\Omega_1 \cdot (N-1)) & \sin(\Omega_1 \cdot (N-1)) & \cdots & \cos(\Omega_L \cdot (N-1)) & \sin(\Omega_L \cdot (N-1))
+\end{pmatrix}$\par $\mathbf{x} \approx A\boldsymbol{\beta}$\par $\hat{\boldsymbol{\beta}} = (A^T A)^{-1} A^T \mathbf{x}$\par $\hat{\boldsymbol{\beta}} = \begin{pmatrix} \hat{a}_1 \\ \hat{b}_1 \\ \hat{a}_2 \\ \hat{b}_2 \\ \vdots \\ \hat{a}_L \\ \hat{b}_L \end{pmatrix}$\par $\hat{a}_\ell = \hat{\beta}_{2\ell-1} \quad \text{for } \ell = 1, 2, \ldots, L$\par$\hat{b}_\ell = \hat{\beta}_{2\ell} \quad \text{for } \ell = 1, 2, \ldots, L$
 \item Now suppose the frequencies $\Omega_\ell$ were not known.
 If we had to solve for the parameters $a_\ell$, $b_\ell$ and $\Omega_\ell$,
-would the problem be a linear regression problem?
+would the problem be a linear regression problem? 
+ \par The model wouldn't be linear because for $\mathbf{x} \approx A\boldsymbol{\beta}$ A must be a known function, but if $\Omega_\ell$ is unknown then A depends on itself.
 \end{enumerate}
 
 \item \emph{Python broadcasting}.  Rewrite the following code without for-loops using
@@ -349,6 +448,12 @@ vectorization and python broadcasting.
     yhat = np.zeros(n)
     for i in range(n):
         yhat[i] = beta[0]*X[i,0] + beta[1]*X[i,1] + beta[2]*X[i,1]*X[i,2]
+\end{python}\par
+\pycode{solution:}
+\begin{python}
+    yhat = (beta[0] * X[:, 0] +
+            beta[1] * X[:, 1] +
+            beta[2] * X[:, 1] * X[;, 2])
 \end{python}
 
 \item Given vectors \pycode{x}, \pycode{alpha}, and \pycode{beta} computes a vector \pycode{yhat}:
@@ -360,6 +465,10 @@ vectorization and python broadcasting.
         for j in range(m):
             yhat[i] += alpha[j]*np.exp(-beta[j]*x[i])
 \end{python}
+Solution:
+\begin{python}
+    np.sum(alpha * np.exp(-beta * x[:, None]), axis=1)
+\end{python}
 
 \item Given arrays \pycode{x} and \pycode{y}, find the squared distances \pycode{dist}:
 \begin{python}
@@ -370,6 +479,11 @@ vectorization and python broadcasting.
         for j in range(m):
             for k in range(d):
                 dist[i,j] += (x[i,k]-y[j,k])**2
+\end{python}
+Solution:
+\begin{python}
+    diff = x[:,None,:]-y[None,:,:]
+    d = np.sum(diff**2,axis=2)
 \end{python}
 
 \end{enumerate}
