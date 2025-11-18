@@ -1,5 +1,6 @@
 \documentclass[11pt]{article}
 
+\usepackage[utf8]{inputenc}
 \usepackage{fullpage}
 \usepackage{amsmath, amssymb, bm, cite, epsfig, psfrag}
 \usepackage{graphicx}
@@ -263,8 +264,55 @@ threshold output function \eqref{eq:gout_thresh}:
 of $(x_1,x_2, x_3)$.  For each component $j$, indicate where in the $(x_1,x_2, x_3)$
 hyperplane $u^\hid_j=1$.
 
+\textbf{Solution:}
+We have $\zbf^\hid = W^\hid \xbf + \bbf^\hid$:
+\begin{align*}
+z_1^\hid &= x_1 + x_3 \\
+z_2^\hid &= x_2 + x_3 \\
+z_3^\hid &= x_1 + x_2 - 1 \\
+z_4^\hid &= x_1 + x_2 + x_3 + 1
+\end{align*}
+Since $u_j^\hid = g_{\rm act}(z_j^\hid)$, we have:
+\begin{align*}
+u_1^\hid &= \begin{cases} 1 & \text{if } x_1 + x_3 \geq 0 \\ 0 & \text{otherwise} \end{cases} \\
+u_2^\hid &= \begin{cases} 1 & \text{if } x_2 + x_3 \geq 0 \\ 0 & \text{otherwise} \end{cases} \\
+u_3^\hid &= \begin{cases} 1 & \text{if } x_1 + x_2 \geq 1 \\ 0 & \text{otherwise} \end{cases} \\
+u_4^\hid &= \begin{cases} 1 & \text{if } x_1 + x_2 + x_3 \geq -1 \\ 0 & \text{otherwise} \end{cases}
+\end{align*}
+The hyperplanes where $u_j^\hid = 1$ are:
+\begin{itemize}
+\item $u_1^\hid = 1$: $x_1 + x_3 \geq 0$
+\item $u_2^\hid = 1$: $x_2 + x_3 \geq 0$
+\item $u_3^\hid = 1$: $x_1 + x_2 \geq 1$
+\item $u_4^\hid = 1$: $x_1 + x_2 + x_3 \geq -1$
+\end{itemize}
+
 \item Write $z^\out$ as a function of $(x_1,x_2, x_3)$.  In what region is
 $\hat{y}=1$? (You can describe in mathematical formulae).
+
+\textbf{Solution:}
+We have $z^\out = W^\out \ubf^\hid + b^\out = u_1^\hid + u_2^\hid - u_3^\hid - u_4^\hid - 1.5$.
+
+Since each $u_j^\hid \in \{0,1\}$, $z^\out$ can take values in $\{-3.5, -2.5, -1.5, -0.5, 0.5, 1.5, 2.5, 3.5\}$.
+
+$\hat{y} = 1$ when $z^\out \geq 0$, which occurs when:
+\[
+u_1^\hid + u_2^\hid - u_3^\hid - u_4^\hid \geq 1.5
+\]
+Since the left side is an integer, this means:
+\[
+u_1^\hid + u_2^\hid - u_3^\hid - u_4^\hid \geq 2
+\]
+This is satisfied when:
+\begin{itemize}
+\item $u_1^\hid = u_2^\hid = u_4^\hid = 1$ and $u_3^\hid = 0$, i.e., $x_1 + x_3 \geq 0$, $x_2 + x_3 \geq 0$, $x_1 + x_2 < 1$, and $x_1 + x_2 + x_3 \geq -1$
+\item $u_1^\hid = u_2^\hid = u_3^\hid = u_4^\hid = 1$, i.e., $x_1 + x_3 \geq 0$, $x_2 + x_3 \geq 0$, $x_1 + x_2 \geq 1$, and $x_1 + x_2 + x_3 \geq -1$
+\end{itemize}
+The feasible regions are:
+\begin{align*}
+\hat{y} = 1 \text{ when: } &(x_1 + x_3 \geq 0) \land (x_2 + x_3 \geq 0) \land (x_1 + x_2 < 1) \land (x_1 + x_2 + x_3 \geq -1) \\
+&\text{OR } (x_1 + x_3 \geq 0) \land (x_2 + x_3 \geq 0) \land (x_1 + x_2 \geq 1) \land (x_1 + x_2 + x_3 \geq -1)
+\end{align*}
 \end{enumerate}
 
 
@@ -293,10 +341,27 @@ draw $u^\hid_j$ as a function of $x$ over some suitable range of values $x$.
 You may draw them on one plot, or on
 multiple plots.
 
+\textbf{Solution:}
+$N_h = 3$ (from the dimension of $\Wbf^\hid$).
+
+For each $j$:
+\begin{align*}
+u_1^\hid(x) &= \max\{0, -x - 1\} = \begin{cases} -x - 1 & \text{if } x \leq -1 \\ 0 & \text{if } x > -1 \end{cases} \\
+u_2^\hid(x) &= \max\{0, x + 1\} = \begin{cases} 0 & \text{if } x < -1 \\ x + 1 & \text{if } x \geq -1 \end{cases} \\
+u_3^\hid(x) &= \max\{0, x - 2\} = \begin{cases} 0 & \text{if } x < 2 \\ x - 2 & \text{if } x \geq 2 \end{cases}
+\end{align*}
+These are ReLU functions with breakpoints at $x = -1$, $x = -1$, and $x = 2$ respectively.
+
 \item Since the network is for regression, you may choose
 the activation function $g_{\rm out}(z^\out)$ to be linear.
 Given training data $(x_i,y_i)$, $i=1,\ldots,N$, formally define the loss function you would use
 to train the network?
+
+\textbf{Solution:}
+For regression with linear output activation, we use the mean squared error (MSE) loss:
+\[
+L = \frac{1}{N} \sum_{i=1}^N (y_i - \hat{y}_i)^2 = \frac{1}{N} \sum_{i=1}^N \left(y_i - \left(\sum_{k=1}^{N_h} W_k^\out u_k^\hid(x_i) + b^\out\right)\right)^2
+\]
 
 \item Using the output activation and loss function selected in part (b), set up the formulation to determine
 output weights and bias, $\Wbf^\out$, $b^\out$,
@@ -308,11 +373,68 @@ $y_i$ & 0 & 0   & 1 & 3 & 3 \\ \hline
 \end{tabular}
 \end{center}
 
+\textbf{Solution:}
+First, compute $\ubf^\hid(x_i)$ for each training point:
+\begin{align*}
+\ubf^\hid(-2) &= [1, 0, 0]^T \\
+\ubf^\hid(-1) &= [0, 0, 0]^T \\
+\ubf^\hid(0) &= [0, 1, 0]^T \\
+\ubf^\hid(3) &= [0, 4, 1]^T \\
+\ubf^\hid(3.5) &= [0, 4.5, 1.5]^T
+\end{align*}
+Let $\Ubf = [\ubf^\hid(x_1), \ldots, \ubf^\hid(x_5)]^T$ (5×3 matrix) and $\ybf = [0, 0, 1, 3, 3]^T$.
+We solve: $\ybf = \Ubf \Wbf^\out + b^\out \one$, where $\one$ is a vector of ones.
+This is a linear system: $[\Ubf, \one] [\Wbf^\out; b^\out] = \ybf$.
+
+\begin{python}
+import numpy as np
+
+# Training data
+x = np.array([-2, -1, 0, 3, 3.5])
+y = np.array([0, 0, 1, 3, 3])
+
+# Compute hidden layer outputs
+W_hid = np.array([[-1], [1], [1]])
+b_hid = np.array([[-1], [1], [-2]])
+u_hid = np.maximum(0, W_hid @ x.reshape(1, -1) + b_hid).T
+
+# Set up linear system: [U, ones] @ [W_out; b_out] = y
+U = np.hstack([u_hid, np.ones((5, 1))])
+params = np.linalg.lstsq(U, y, rcond=None)[0]
+W_out = params[:3]
+b_out = params[3]
+
+print(f"W_out = {W_out}")
+print(f"b_out = {b_out}")
+\end{python}
+
 \item
  Based on your solution for the output weights and bias,
 draw $\hat{y}$ vs.\ $x$ over some suitable range of values $x$.  Write a few line of python code to do this.
 
+\textbf{Solution:}
+\begin{python}
+import numpy as np
+import matplotlib.pyplot as plt
 
+# Parameters (from previous solution)
+W_hid = np.array([[-1], [1], [1]])
+b_hid = np.array([[-1], [1], [-2]])
+W_out = np.array([0, 0.5, 1])  # Example solution
+b_out = 0.5  # Example solution
+
+# Evaluate over range
+x_plot = np.linspace(-3, 5, 1000)
+u_hid_plot = np.maximum(0, W_hid @ x_plot.reshape(1, -1) + b_hid)
+y_hat = W_out @ u_hid_plot + b_out
+
+plt.plot(x_plot, y_hat)
+plt.xlabel('x')
+plt.ylabel('$\\hat{y}$')
+plt.title('Network output vs input')
+plt.grid(True)
+plt.show()
+\end{python}
 
 \item Write a function \pycode{predict} to output $\hat{y}$ given a vector of inputs
 \pycode{x}.  Assume \pycode{x} is a vector representing a batch of samples and
@@ -320,6 +442,43 @@ draw $\hat{y}$ vs.\ $x$ over some suitable range of values $x$.  Write a few lin
 you selected in part (b), but your function should take the weights and biases
 for both layers as inputs.  Clearly state any assumptions on the formats for
 the weights and biases.  Also, to receive full credit, you must not use any for loops.
+
+\textbf{Solution:}
+\textbf{Assumptions:}
+\begin{itemize}
+\item \pycode{x} is a 1D array of shape $(N,)$ where $N$ is the batch size
+\item \pycode{W_hid} is a 1D array of shape $(N_h,)$
+\item \pycode{b_hid} is a 1D array of shape $(N_h,)$
+\item \pycode{W_out} is a 1D array of shape $(N_h,)$
+\item \pycode{b_out} is a scalar
+\end{itemize}
+
+\begin{python}
+import numpy as np
+
+def predict(x, W_hid, b_hid, W_out, b_out):
+    """
+    Predict output for batch of inputs.
+    
+    Args:
+        x: 1D array of shape (N,) - batch of inputs
+        W_hid: 1D array of shape (N_h,) - hidden layer weights
+        b_hid: 1D array of shape (N_h,) - hidden layer biases
+        W_out: 1D array of shape (N_h,) - output layer weights
+        b_out: scalar - output layer bias
+    
+    Returns:
+        yhat: 1D array of shape (N,) - predictions
+    """
+    # Hidden layer: z_hid shape (N_h, N)
+    z_hid = W_hid[:, np.newaxis] * x[np.newaxis, :] + b_hid[:, np.newaxis]
+    u_hid = np.maximum(0, z_hid)  # ReLU activation, shape (N_h, N)
+    
+    # Output layer: linear
+    yhat = W_out @ u_hid + b_out  # shape (N,)
+    
+    return yhat
+\end{python}
 \end{enumerate}
 
 \pagebreak
@@ -340,6 +499,12 @@ To train the model, we get training data $(\xbf_i,y_i)$, $i=1,\ldots,N$.
 batch of inputs $\xbf_i$ from the training data.  That is, correctly
 add the indexing $i$, to the equations.
 
+\textbf{Solution:}
+\begin{align}
+z_{ij} &= \sum_{k=1}^{N_i} W_{jk} x_{ik} + b_j, \quad u_{ij} = \frac{1}{1+\exp(-z_{ij})}, \quad j = 1,\ldots,M, \quad i = 1,\ldots,N \\
+\hat{y}_i &= \frac{\sum_{j=1}^{M} a_j u_{ij}}{\sum_{j=1}^M u_{ij}}, \quad i = 1,\ldots,N
+\end{align}
+
 \item If we use a loss function,
 \[
     L = \sum_{i=1}^N (y_i - \hat{y}_i)^2,
@@ -348,34 +513,143 @@ draw the computation graph describing the mapping from $\xbf_i$ and parameters
 to $L$.
 Indicate which nodes are trainable parameters.
 
+\textbf{Solution:}
+The computation graph is:
+\begin{align*}
+\xbf_i &\rightarrow \zbf_i = \Wbf \xbf_i + \bbf \quad \text{(trainable: } \Wbf, \bbf \text{)} \\
+\zbf_i &\rightarrow \ubf_i = \sigma(\zbf_i) \quad \text{(sigmoid)} \\
+\ubf_i &\rightarrow \hat{y}_i = \frac{\sum_{j=1}^M a_j u_{ij}}{\sum_{j=1}^M u_{ij}} \quad \text{(weighted average)} \\
+\hat{y}_i, y_i &\rightarrow L_i = (y_i - \hat{y}_i)^2 \\
+L_i &\rightarrow L = \sum_{i=1}^N L_i
+\end{align*}
+Trainable parameters: $W_{jk}$, $b_j$ (and $a_j$ if trainable, but stated as fixed).
 
 \item Compute the gradient  $\partial L/\partial \hat{y}_i$
 for all $i$.
+
+\textbf{Solution:}
+\[
+\frac{\partial L}{\partial \hat{y}_i} = \frac{\partial}{\partial \hat{y}_i} \sum_{k=1}^N (y_k - \hat{y}_k)^2 = -2(y_i - \hat{y}_i)
+\]
+So $\partial L/\partial \hat{\bf y} = -2(\ybf - \hat{\ybf})$ where $\hat{\ybf} = [\hat{y}_1, \ldots, \hat{y}_N]^T$.
 
 \item Suppose that, in backpropagation, we have computed $\partial L/\partial \hat{y}_i$
 for all $i$, represented as $\partial L/\partial \hat{\bf y}$. Describe how to compute the components of the gradient
 $\partial L/\partial \ubf$.
 
+\textbf{Solution:}
+We have $\hat{y}_i = \frac{\sum_{j=1}^M a_j u_{ij}}{S_i}$ where $S_i = \sum_{j=1}^M u_{ij}$.
+
+Using the quotient rule:
+\[
+\frac{\partial \hat{y}_i}{\partial u_{ij}} = \frac{a_j S_i - \sum_{k=1}^M a_k u_{ik}}{S_i^2} = \frac{a_j - \hat{y}_i}{S_i}
+\]
+
+By the chain rule:
+\[
+\frac{\partial L}{\partial u_{ij}} = \frac{\partial L}{\partial \hat{y}_i} \frac{\partial \hat{y}_i}{\partial u_{ij}} = \frac{\partial L}{\partial \hat{y}_i} \frac{a_j - \hat{y}_i}{S_i}
+\]
+
+In matrix form, if $\partial L/\partial \hat{\ybf}$ is a vector of length $N$ and $\Ubf$ is $N \times M$:
+\[
+\frac{\partial L}{\partial \Ubf} = \left(\frac{\partial L}{\partial \hat{\ybf}} \odot \frac{1}{\Sbf}\right) (\abf - \hat{\ybf})^T
+\]
+where $\odot$ is element-wise multiplication, $\Sbf = [S_1, \ldots, S_N]^T$, and the outer product gives the $N \times M$ gradient matrix.
+
 \item
 Suppose that we have computed the gradient $\partial L/\partial \ubf$, describe how would you compute the gradient $\partial L/\partial \zbf$.
 
+\textbf{Solution:}
+Since $u_{ij} = \sigma(z_{ij}) = 1/(1+\exp(-z_{ij}))$, we have:
+\[
+\frac{\partial u_{ij}}{\partial z_{ij}} = \sigma(z_{ij})(1 - \sigma(z_{ij})) = u_{ij}(1 - u_{ij})
+\]
 
+By the chain rule:
+\[
+\frac{\partial L}{\partial z_{ij}} = \frac{\partial L}{\partial u_{ij}} \frac{\partial u_{ij}}{\partial z_{ij}} = \frac{\partial L}{\partial u_{ij}} u_{ij}(1 - u_{ij})
+\]
+
+In matrix form:
+\[
+\frac{\partial L}{\partial \Zbf} = \frac{\partial L}{\partial \Ubf} \odot \Ubf \odot (1 - \Ubf)
+\]
+where all operations are element-wise.
 
 \item
 Suppose that we have computed the gradient $\partial L/\partial \zbf$, describe how would you compute the gradient
  $\partial L/\partial W_{jk}$ and $\partial L/\partial b_j$.
 
+\textbf{Solution:}
+Since $z_{ij} = \sum_{k=1}^{N_i} W_{jk} x_{ik} + b_j$, we have:
+\[
+\frac{\partial z_{ij}}{\partial W_{jk}} = x_{ik}, \quad \frac{\partial z_{ij}}{\partial b_j} = 1
+\]
+
+By the chain rule:
+\[
+\frac{\partial L}{\partial W_{jk}} = \sum_{i=1}^N \frac{\partial L}{\partial z_{ij}} \frac{\partial z_{ij}}{\partial W_{jk}} = \sum_{i=1}^N \frac{\partial L}{\partial z_{ij}} x_{ik}
+\]
+
+\[
+\frac{\partial L}{\partial b_j} = \sum_{i=1}^N \frac{\partial L}{\partial z_{ij}} \frac{\partial z_{ij}}{\partial b_j} = \sum_{i=1}^N \frac{\partial L}{\partial z_{ij}}
+\]
+
+In matrix form:
+\[
+\frac{\partial L}{\partial \Wbf} = \left(\frac{\partial L}{\partial \Zbf}\right)^T \Xbf, \quad \frac{\partial L}{\partial \bbf} = \left(\frac{\partial L}{\partial \Zbf}\right)^T \one
+\]
+where $\Xbf$ is $N \times N_i$ with rows $\xbf_i^T$, and $\one$ is a vector of ones.
+
  \item
  Put all above together, describe how would you compute the gradient  $\partial L/\partial W_{jk}$ and $\partial L/\partial b_j$.
 
+\textbf{Solution:}
+Backpropagation steps:
+\begin{enumerate}
+\item Forward pass: Compute $\zbf_i$, $\ubf_i$, $\hat{y}_i$ for all $i$.
+\item Compute $\frac{\partial L}{\partial \hat{y}_i} = -2(y_i - \hat{y}_i)$ for all $i$.
+\item Compute $\frac{\partial L}{\partial u_{ij}} = \frac{\partial L}{\partial \hat{y}_i} \frac{a_j - \hat{y}_i}{S_i}$.
+\item Compute $\frac{\partial L}{\partial z_{ij}} = \frac{\partial L}{\partial u_{ij}} u_{ij}(1 - u_{ij})$.
+\item Compute $\frac{\partial L}{\partial W_{jk}} = \sum_{i=1}^N \frac{\partial L}{\partial z_{ij}} x_{ik}$ and $\frac{\partial L}{\partial b_j} = \sum_{i=1}^N \frac{\partial L}{\partial z_{ij}}$.
+\end{enumerate}
 
 \item Write a few lines of python code to implement the gradients  $\partial L/\partial \ubf$ (as in part (d)), given the gradient $\partial L/\partial \hat{\bf y}$.
 Indicate how you represent the gradients.
 Full credit requires that you avoid for-loops.
 
+\textbf{Solution:}
+\textbf{Representation:}
+\begin{itemize}
+\item $\partial L/\partial \hat{\ybf}$: 1D array of shape $(N,)$
+\item $\partial L/\partial \Ubf$: 2D array of shape $(N, M)$
+\item $\abf$: 1D array of shape $(M,)$
+\item $\hat{\ybf}$: 1D array of shape $(N,)$
+\item $\Ubf$: 2D array of shape $(N, M)$
+\end{itemize}
+
+\begin{python}
+import numpy as np
+
+def grad_L_wrt_u(dL_dyhat, a, yhat, U):
+    """
+    Compute gradient of L with respect to U.
+    
+    Args:
+        dL_dyhat: 1D array of shape (N,) - dL/dyhat
+        a: 1D array of shape (M,) - weights a_j
+        yhat: 1D array of shape (N,) - predictions yhat_i
+        U: 2D array of shape (N, M) - hidden activations u_{ij}
+    
+    Returns:
+        dL_dU: 2D array of shape (N, M) - dL/dU
+    """
+    S = np.sum(U, axis=1)  # S_i = sum_j u_{ij}, shape (N,)
+    dL_dU = (dL_dyhat[:, np.newaxis] / S[:, np.newaxis]) * (a[np.newaxis, :] - yhat[:, np.newaxis])
+    return dL_dU
+\end{python}
+
 \end{enumerate}
 
 \end{enumerate}
-\end{document}
-
-c 
+\end{document} 
