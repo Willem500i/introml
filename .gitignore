@@ -3,3 +3,15 @@ introml
 */.ipynb_checkpoints
 /unit08_svm/data
 unit08_svm/data
+unit10_cnn/dataset
+unit10_cnn/dataset_temp
+unit10_cnn/test
+unit10_cnn/train
+.obsidian
+.obsidian_cache
+.obsidian_cache_temp
+.obsidian_cache_temp_temp
+.obsidian_cache_temp_temp_temp
+.obsidian_cache_temp_temp_temp_temp
+.obsidian_cache_temp_temp_temp_temp_temp
+.obsidian_cache_temp_temp_temp_temp_temp_temp

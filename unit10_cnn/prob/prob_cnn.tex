@@ -242,6 +242,22 @@ at a sample rate of 240 Hz for 10 seconds.
 and is 10 seconds long.  The video is color with a resolution of 512 $\times$ 512.
 \end{enumerate}
 
+\begin{solution}
+\begin{enumerate}[(a)]
+\item For a batch of 100 color images, each 256 $\times$ 256, the tensor shape is $(100, 256, 256, 3)$.
+The dimensions represent: batch size, height, width, and RGB channels.
+
+\item For 40 EEG recordings with 80 channels at 240 Hz for 10 seconds:
+The number of time samples is $240 \times 10 = 2400$.
+The tensor shape is $(40, 2400, 80)$.
+The dimensions represent: batch size, time samples, and channels.
+
+\item For 32 videos at 30 fps for 10 seconds with color resolution 512 $\times$ 512:
+The number of frames is $30 \times 10 = 300$.
+The tensor shape is $(32, 300, 512, 512, 3)$.
+The dimensions represent: batch size, frames (time), height, width, and RGB channels.
+\end{enumerate}
+\end{solution}
 
 \item \emph{2D convolutions.}  Let $X$ and $W$ be arrays,
 \[
@@ -272,6 +288,44 @@ where the summation in \eqref{eq:Zconv} does not exceed the boundaries of $W$ or
 \item Find one pixel location where $Z[i,j]=0$.
 \end{enumerate}
 
+\begin{solution}
+\begin{enumerate}[(a)]
+\item The kernel $W$ has shape $(2,2)$, so $k_1 \in \{0,1\}$ and $k_2 \in \{0,1\}$.
+
+\item For valid convolution, we need $i+k_1 < 6$ and $j+k_2 < 5$ for all $k_1 \in \{0,1\}$, $k_2 \in \{0,1\}$.
+This means $i \leq 4$ and $j \leq 3$.
+The output $Z$ has size $(5, 4)$.
+
+\item Computing $Z[i,j]$ for valid positions:
+\begin{align*}
+Z[0,0] &= 1\cdot 0 + (-1)\cdot 0 + 1\cdot 0 + (-1)\cdot 3 = -3 \\
+Z[0,1] &= 1\cdot 0 + (-1)\cdot 0 + 1\cdot 3 + (-1)\cdot 3 = 0 \\
+Z[0,2] &= 1\cdot 0 + (-1)\cdot 0 + 1\cdot 3 + (-1)\cdot 3 = 0 \\
+Z[0,3] &= 1\cdot 0 + (-1)\cdot 0 + 1\cdot 3 + (-1)\cdot 0 = 3 \\
+Z[1,0] &= 1\cdot 0 + (-1)\cdot 3 + 1\cdot 3 + (-1)\cdot 3 = -3 \\
+Z[1,1] &= 1\cdot 3 + (-1)\cdot 3 + 1\cdot 3 + (-1)\cdot 3 = 0 \\
+Z[1,2] &= 1\cdot 3 + (-1)\cdot 3 + 1\cdot 3 + (-1)\cdot 2 = 1 \\
+Z[1,3] &= 1\cdot 3 + (-1)\cdot 3 + 1\cdot 2 + (-1)\cdot 3 = -1 \\
+Z[2,0] &= 1\cdot 0 + (-1)\cdot 3 + 1\cdot 3 + (-1)\cdot 3 = -3 \\
+Z[2,1] &= 1\cdot 3 + (-1)\cdot 3 + 1\cdot 3 + (-1)\cdot 3 = 0 \\
+Z[2,2] &= 1\cdot 3 + (-1)\cdot 3 + 1\cdot 3 + (-1)\cdot 2 = 1 \\
+Z[2,3] &= 1\cdot 3 + (-1)\cdot 3 + 1\cdot 2 + (-1)\cdot 3 = -1 \\
+Z[3,0] &= 1\cdot 0 + (-1)\cdot 3 + 1\cdot 3 + (-1)\cdot 2 = -2 \\
+Z[3,1] &= 1\cdot 3 + (-1)\cdot 2 + 1\cdot 3 + (-1)\cdot 2 = 2 \\
+Z[3,2] &= 1\cdot 2 + (-1)\cdot 3 + 1\cdot 2 + (-1)\cdot 3 = -2 \\
+Z[3,3] &= 1\cdot 3 + (-1)\cdot 0 + 1\cdot 3 + (-1)\cdot 0 = 6 \\
+Z[4,0] &= 1\cdot 0 + (-1)\cdot 3 + 1\cdot 3 + (-1)\cdot 2 = -2 \\
+Z[4,1] &= 1\cdot 3 + (-1)\cdot 2 + 1\cdot 3 + (-1)\cdot 2 = 2 \\
+Z[4,2] &= 1\cdot 2 + (-1)\cdot 3 + 1\cdot 2 + (-1)\cdot 3 = -2 \\
+Z[4,3] &= 1\cdot 3 + (-1)\cdot 0 + 1\cdot 0 + (-1)\cdot 0 = 3
+\end{align*}
+The largest positive value is $Z[3,3] = 6$ (and also $Z[4,3] = 6$).
+
+\item The largest negative value is $Z[0,0] = -3$ (and also $Z[1,0] = -3$ and $Z[2,0] = -3$).
+
+\item One location where $Z[i,j] = 0$ is $(0,1)$, $(0,2)$, or $(1,1)$.
+\end{enumerate}
+\end{solution}
 
 \item \emph{Complexity and number of parameters.}
 Suppose that a convolutional layer of a neural network has an input tensor $X[i,j,k]$ and computes
@@ -289,6 +343,39 @@ Assume the convolution is computed on the \emph{valid} pixels.
 \item If $W$ and $b$ are to be learned, what are the total number of trainable parameters in the layer?
 \end{enumerate}
 
+\begin{solution}
+\begin{enumerate}[(a)]
+\item The input $X$ has shape $(48, 64, 10)$ representing (height, width, input channels).
+The kernel $W$ has shape $(3, 3, 10, 20)$ representing (kernel height, kernel width, input channels, output channels).
+
+For valid convolution with a $3 \times 3$ kernel:
+\begin{align*}
+\text{Output height} &= 48 - 3 + 1 = 46 \\
+\text{Output width} &= 64 - 3 + 1 = 62 \\
+\text{Output channels} &= 20
+\end{align*}
+Therefore, both $Z$ and $U$ have shape $(46, 62, 20)$.
+
+\item The number of input channels is 10, and the number of output channels is 20.
+
+\item For each output position $(i,j)$ and each output channel $m$, we compute:
+\[
+Z[i,j,m] = \sum_{k_1=0}^{2} \sum_{k_2=0}^{2} \sum_{n=0}^{9} W[k_1,k_2,n,m] X[i+k_1,j+k_2,n] + b[m]
+\]
+This requires $3 \times 3 \times 10 = 90$ multiplications per output element.
+
+The number of output elements is $46 \times 62 \times 20 = 57,040$.
+
+Total multiplications: $57,040 \times 90 = 5,133,600$.
+
+\item The number of trainable parameters:
+\begin{align*}
+\text{Parameters in } W &: 3 \times 3 \times 10 \times 20 = 1,800 \\
+\text{Parameters in } b &: 20 \\
+\text{Total} &: 1,820
+\end{align*}
+\end{enumerate}
+\end{solution}
 
 \item \emph{Back-propagation.}
 Suppose that a convolutional layer in some neural network
@@ -306,6 +393,58 @@ Show how to compute the following:
 \item The gradient components $\partial J/\partial W[k_1,k_2,n,m]$.
 \item The gradient components $\partial J/\partial X[i,j_1,j_2,n]$.
 \end{enumerate}
+
+\begin{solution}
+\begin{enumerate}[(a)]
+\item Using the chain rule, we have:
+\[
+\frac{\partial J}{\partial Z[i,j_1,j_2,m]} = \frac{\partial J}{\partial U[i,j_1,j_2,m]} \cdot \frac{\partial U[i,j_1,j_2,m]}{\partial Z[i,j_1,j_2,m]}
+\]
+
+Since $U[i,j_1,j_2,m] = \sigma(Z[i,j_1,j_2,m]) = 1/(1+\exp(-Z[i,j_1,j_2,m]))$, the derivative is:
+\[
+\frac{\partial U}{\partial Z} = U(1-U) = \sigma(Z)(1-\sigma(Z))
+\]
+
+Therefore:
+\[
+\frac{\partial J}{\partial Z[i,j_1,j_2,m]} = \frac{\partial J}{\partial U[i,j_1,j_2,m]} \cdot U[i,j_1,j_2,m](1-U[i,j_1,j_2,m])
+\]
+
+\item To compute $\partial J/\partial W[k_1,k_2,n,m]$, we use the chain rule through $Z$:
+\[
+\frac{\partial J}{\partial W[k_1,k_2,n,m]} = \sum_i \sum_{j_1} \sum_{j_2} \frac{\partial J}{\partial Z[i,j_1,j_2,m]} \cdot \frac{\partial Z[i,j_1,j_2,m]}{\partial W[k_1,k_2,n,m]}
+\]
+
+From the convolution equation:
+\[
+Z[i,j_1,j_2,m] = \sum_{k'_1} \sum_{k'_2} \sum_{n'} W[k'_1,k'_2,n',m] X[i,j_1+k'_1,j_2+k'_2,n'] + b[m]
+\]
+
+We have:
+\[
+\frac{\partial Z[i,j_1,j_2,m]}{\partial W[k_1,k_2,n,m]} = X[i,j_1+k_1,j_2+k_2,n]
+\]
+
+Therefore:
+\[
+\frac{\partial J}{\partial W[k_1,k_2,n,m]} = \sum_i \sum_{j_1} \sum_{j_2} \frac{\partial J}{\partial Z[i,j_1,j_2,m]} \cdot X[i,j_1+k_1,j_2+k_2,n]
+\]
+
+\item To compute $\partial J/\partial X[i,j_1,j_2,n]$, we need to sum over all positions where $X[i,j_1,j_2,n]$ appears in the convolution. For a given input position $(i,j_1,j_2,n)$, it contributes to $Z[i,j'_1,j'_2,m]$ when $j'_1 + k_1 = j_1$ and $j'_2 + k_2 = j_2$, i.e., when $j'_1 = j_1 - k_1$ and $j'_2 = j_2 - k_2$.
+
+\[
+\frac{\partial J}{\partial X[i,j_1,j_2,n]} = \sum_{k_1} \sum_{k_2} \sum_m \frac{\partial J}{\partial Z[i,j_1-k_1,j_2-k_2,m]} \cdot \frac{\partial Z[i,j_1-k_1,j_2-k_2,m]}{\partial X[i,j_1,j_2,n]}
+\]
+
+Since $\partial Z[i,j_1-k_1,j_2-k_2,m]/\partial X[i,j_1,j_2,n] = W[k_1,k_2,n,m]$:
+\[
+\frac{\partial J}{\partial X[i,j_1,j_2,n]} = \sum_{k_1} \sum_{k_2} \sum_m \frac{\partial J}{\partial Z[i,j_1-k_1,j_2-k_2,m]} \cdot W[k_1,k_2,n,m]
+\]
+
+This is essentially a convolution of the gradient $\partial J/\partial Z$ with the flipped kernel $W$.
+\end{enumerate}
+\end{solution}
 
 \item \emph{Sub-sampling and pooling}.
 In CNNs, convolution operations are often followed
@@ -339,6 +478,44 @@ Write equations for sampling and max pooling of $X$ if the operations are to be
 performed on each channel and sample.  What are the output shapes?
 
 \end{enumerate}
+
+\begin{solution}
+\begin{enumerate}[(a)]
+\item For $\xbf = [1,2,3,2,0,10,1,0]$ with sub-sampling stride $s=2$:
+\begin{align*}
+y[0] &= x[0] = 1 \\
+y[1] &= x[2] = 3 \\
+y[2] &= x[4] = 0 \\
+y[3] &= x[6] = 1
+\end{align*}
+Therefore, $\ybf = [1,3,0,1]$.
+
+\item For the same vector $\xbf = [1,2,3,2,0,10,1,0]$ with max pooling stride $s=2$ and pool size $p=2$:
+\begin{align*}
+y[0] &= \max(x[0], x[1]) = \max(1,2) = 2 \\
+y[1] &= \max(x[2], x[3]) = \max(3,2) = 3 \\
+y[2] &= \max(x[4], x[5]) = \max(0,10) = 10 \\
+y[3] &= \max(x[6], x[7]) = \max(1,0) = 1
+\end{align*}
+Therefore, $\ybf = [2,3,10,1]$.
+
+\item For a tensor $X[i,j,n]$ of shape $(B,N,C)$:
+
+\emph{Sub-sampling} with stride $s$:
+\[
+Y[i,k,n] = X[i,sk,n], \quad k = 0, 1, \ldots, \left\lfloor \frac{N-1}{s} \right\rfloor
+\]
+The output shape is $\left(B, \left\lfloor \frac{N-1}{s} \right\rfloor + 1, C\right)$.
+
+\emph{Max pooling} with stride $s$ and pool size $p$:
+\[
+Y[i,k,n] = \max_{j=0,1,\ldots,p-1} X[i,sk+j,n], \quad k = 0, 1, \ldots, \left\lfloor \frac{N-1}{s} \right\rfloor
+\]
+The output shape is $\left(B, \left\lfloor \frac{N-1}{s} \right\rfloor + 1, C\right)$.
+
+In both cases, the operations are applied independently to each batch element $i$ and each channel $n$.
+\end{enumerate}
+\end{solution}
 
 \end{enumerate}
 

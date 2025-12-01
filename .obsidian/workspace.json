@@ -165,5 +165,25 @@
     }
   },
   "active": "16f08291d09993bc",
-  "lastOpenFiles": []
+  "lastOpenFiles": [
+    "Garden_Intelligence_Cover_Letter.md",
+    "introml/bin/toco",
+    "introml/bin/tflite_convert",
+    "introml/bin/tf_upgrade_v2",
+    "introml/bin/saved_model_cli",
+    "introml/bin/import_pb_to_tensorboard",
+    "introml/lib/python3.12/site-packages/tensorflow-2.20.0.dist-info/top_level.txt",
+    "introml/lib/python3.12/site-packages/tensorflow-2.20.0.dist-info/entry_points.txt",
+    "introml/lib/python3.12/site-packages/tensorflow-2.20.0.dist-info/WHEEL",
+    "introml/lib/python3.12/site-packages/tensorflow-2.20.0.dist-info/REQUESTED",
+    "introml/lib/python3.12/site-packages/tensorflow-2.20.0.dist-info/RECORD",
+    "introml/lib/python3.12/site-packages/markdown-3.10.dist-info/licenses/LICENSE.md",
+    "introml/lib/python3.12/site-packages/werkzeug/debug/shared/more.png",
+    "introml/lib/python3.12/site-packages/werkzeug/debug/shared/less.png",
+    "introml/lib/python3.12/site-packages/werkzeug/debug/shared/console.png",
+    "introml/lib/python3.12/site-packages/werkzeug/debug/shared/ICON_LICENSE.md",
+    "introml/lib/python3.12/site-packages/huggingface_hub/templates/modelcard_template.md",
+    "introml/lib/python3.12/site-packages/huggingface_hub/templates/datasetcard_template.md",
+    "introml/lib/python3.12/site-packages/pyarrow/tests/data/orc/README.md"
+  ]
 }
