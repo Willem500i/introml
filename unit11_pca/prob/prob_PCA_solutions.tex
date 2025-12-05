@@ -1,0 +1,496 @@
+\documentclass[11pt]{article}
+
+\usepackage{fullpage}
+\usepackage{amsmath, amssymb, bm, cite, epsfig, psfrag}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{amsthm}
+\usepackage{amsfonts}
+\usepackage{listings}
+\usepackage{cite}
+\usepackage{hyperref}
+\usepackage{tikz}
+\usepackage{enumerate}
+\usepackage{listings}
+\usepackage{mathtools}
+\usepackage{mdframed}
+\lstloadlanguages{Python}
+\usetikzlibrary{shapes,arrows}
+%\usetikzlibrary{dsp,chains}
+
+\DeclareFixedFont{\ttb}{T1}{txtt}{bx}{n}{9} % for bold
+\DeclareFixedFont{\ttm}{T1}{txtt}{m}{n}{9}  % for normal
+% Defining colors
+\usepackage{color}
+\definecolor{deepblue}{rgb}{0,0,0.5}
+\definecolor{deepred}{rgb}{0.6,0,0}
+\definecolor{deepgreen}{rgb}{0,0.5,0}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+%\restylefloat{figure}
+%\theoremstyle{plain}      \newtheorem{theorem}{Theorem}
+%\theoremstyle{definition} \newtheorem{definition}{Definition}
+
+\def\del{\partial}
+\def\ds{\displaystyle}
+\def\ts{\textstyle}
+\def\beq{\begin{equation}}
+\def\eeq{\end{equation}}
+\def\beqa{\begin{eqnarray}}
+\def\eeqa{\end{eqnarray}}
+\def\beqan{\begin{eqnarray*}}
+\def\eeqan{\end{eqnarray*}}
+\def\nn{\nonumber}
+\def\binomial{\mathop{\mathrm{binomial}}}
+\def\half{{\ts\frac{1}{2}}}
+\def\Half{{\frac{1}{2}}}
+\def\N{{\mathbb{N}}}
+\def\Z{{\mathbb{Z}}}
+\def\Q{{\mathbb{Q}}}
+\def\R{{\mathbb{R}}}
+\def\C{{\mathbb{C}}}
+\def\argmin{\mathop{\mathrm{arg\,min}}}
+\def\argmax{\mathop{\mathrm{arg\,max}}}
+%\def\span{\mathop{\mathrm{span}}}
+\def\diag{\mathop{\mathrm{diag}}}
+\def\x{\times}
+\def\limn{\lim_{n \rightarrow \infty}}
+\def\liminfn{\liminf_{n \rightarrow \infty}}
+\def\limsupn{\limsup_{n \rightarrow \infty}}
+\def\MID{\,|\,}
+\def\MIDD{\,;\,}
+
+\newtheorem{proposition}{Proposition}
+\newtheorem{definition}{Definition}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}{Lemma}
+\newtheorem{corollary}{Corollary}
+\newtheorem{assumption}{Assumption}
+\newtheorem{claim}{Claim}
+\def\qed{\mbox{} \hfill $\Box$}
+\setlength{\unitlength}{1mm}
+
+\def\bhat{\widehat{b}}
+\def\ehat{\widehat{e}}
+\def\phat{\widehat{p}}
+\def\qhat{\widehat{q}}
+\def\rhat{\widehat{r}}
+\def\shat{\widehat{s}}
+\def\uhat{\widehat{u}}
+\def\ubar{\overline{u}}
+\def\vhat{\widehat{v}}
+\def\xhat{\widehat{x}}
+\def\xbar{\overline{x}}
+\def\zhat{\widehat{z}}
+\def\zbar{\overline{z}}
+\def\la{\leftarrow}
+\def\ra{\rightarrow}
+\def\MSE{\mbox{\small \sffamily MSE}}
+\def\SNR{\mbox{\small \sffamily SNR}}
+\def\SINR{\mbox{\small \sffamily SINR}}
+\def\arr{\rightarrow}
+\def\Exp{\mathbb{E}}
+\def\var{\mbox{var}}
+\def\Tr{\mbox{Tr}}
+\def\tm1{t\! - \! 1}
+\def\tp1{t\! + \! 1}
+\def\Tm1{T\! - \! 1}
+\def\Tp1{T\! + \! 1}
+
+
+\def\Xset{{\cal X}}
+
+\newcommand{\one}{\mathbf{1}}
+\newcommand{\abf}{\mathbf{a}}
+\newcommand{\bbf}{\mathbf{b}}
+\newcommand{\dbf}{\mathbf{d}}
+\newcommand{\ebf}{\mathbf{e}}
+\newcommand{\gbf}{\mathbf{g}}
+\newcommand{\hbf}{\mathbf{h}}
+\newcommand{\pbf}{\mathbf{p}}
+\newcommand{\pbfhat}{\widehat{\mathbf{p}}}
+\newcommand{\qbf}{\mathbf{q}}
+\newcommand{\qbfhat}{\widehat{\mathbf{q}}}
+\newcommand{\rbf}{\mathbf{r}}
+\newcommand{\rbfhat}{\widehat{\mathbf{r}}}
+\newcommand{\sbf}{\mathbf{s}}
+\newcommand{\sbfhat}{\widehat{\mathbf{s}}}
+\newcommand{\ubf}{\mathbf{u}}
+\newcommand{\ubfhat}{\widehat{\mathbf{u}}}
+\newcommand{\utildebf}{\tilde{\mathbf{u}}}
+\newcommand{\vbf}{\mathbf{v}}
+\newcommand{\vbfhat}{\widehat{\mathbf{v}}}
+\newcommand{\wbf}{\mathbf{w}}
+\newcommand{\wbfhat}{\widehat{\mathbf{w}}}
+\newcommand{\xbf}{\mathbf{x}}
+\newcommand{\xbfhat}{\widehat{\mathbf{x}}}
+\newcommand{\xbfbar}{\overline{\mathbf{x}}}
+\newcommand{\ybf}{\mathbf{y}}
+\newcommand{\zbf}{\mathbf{z}}
+\newcommand{\zbfbar}{\overline{\mathbf{z}}}
+\newcommand{\zbfhat}{\widehat{\mathbf{z}}}
+\newcommand{\Ahat}{\widehat{A}}
+\newcommand{\Abf}{\mathbf{A}}
+\newcommand{\Bbf}{\mathbf{B}}
+\newcommand{\Cbf}{\mathbf{C}}
+\newcommand{\Bbfhat}{\widehat{\mathbf{B}}}
+\newcommand{\Dbf}{\mathbf{D}}
+\newcommand{\Gbf}{\mathbf{G}}
+\newcommand{\Hbf}{\mathbf{H}}
+\newcommand{\Ibf}{\mathbf{I}}
+\newcommand{\Kbf}{\mathbf{K}}
+\newcommand{\Pbf}{\mathbf{P}}
+\newcommand{\Phat}{\widehat{P}}
+\newcommand{\Qbf}{\mathbf{Q}}
+\newcommand{\Rbf}{\mathbf{R}}
+\newcommand{\Rhat}{\widehat{R}}
+\newcommand{\Sbf}{\mathbf{S}}
+\newcommand{\Ubf}{\mathbf{U}}
+\newcommand{\Vbf}{\mathbf{V}}
+\newcommand{\Wbf}{\mathbf{W}}
+\newcommand{\Xhat}{\widehat{X}}
+\newcommand{\Xbf}{\mathbf{X}}
+\newcommand{\Ybf}{\mathbf{Y}}
+\newcommand{\Zbf}{\mathbf{Z}}
+\newcommand{\Zhat}{\widehat{Z}}
+\newcommand{\Zbfhat}{\widehat{\mathbf{Z}}}
+\def\alphabf{{\boldsymbol \alpha}}
+\def\betabf{{\boldsymbol \beta}}
+\def\betabfhat{{\widehat{\bm{\beta}}}}
+\def\epsilonbf{{\boldsymbol \epsilon}}
+\def\mubf{{\boldsymbol \mu}}
+\def\lambdabf{{\boldsymbol \lambda}}
+\def\etabf{{\boldsymbol \eta}}
+\def\xibf{{\boldsymbol \xi}}
+\def\taubf{{\boldsymbol \tau}}
+\def\sigmahat{{\widehat{\sigma}}}
+\def\thetabf{{\bm{\theta}}}
+\def\thetabfhat{{\widehat{\bm{\theta}}}}
+\def\thetahat{{\widehat{\theta}}}
+\def\mubar{\overline{\mu}}
+\def\muavg{\mu}
+\def\sigbf{\bm{\sigma}}
+\def\etal{\emph{et al.}}
+\def\Ggothic{\mathfrak{G}}
+\def\Pset{{\mathcal P}}
+\newcommand{\bigCond}[2]{\bigl({#1} \!\bigm\vert\! {#2} \bigr)}
+\newcommand{\BigCond}[2]{\Bigl({#1} \!\Bigm\vert\! {#2} \Bigr)}
+\newcommand{\tran}{^{\text{\sf T}}}
+\newcommand{\herm}{^{\text{\sf H}}}
+\newcommand{\bkt}[1]{{\langle #1 \rangle}}
+\def\Norm{{\mathcal N}}
+\newcommand{\vmult}{.}
+\newcommand{\vdiv}{./}
+
+
+% Python style for highlighting
+\newcommand\pythonstyle{\lstset{
+language=Python,
+backgroundcolor=\color{backcolour},
+commentstyle=\color{deepgreen},
+basicstyle=\ttm,
+otherkeywords={self},             % Add keywords here
+keywordstyle=\ttb\color{deepblue},
+emph={MyClass,__init__},          % Custom highlighting
+emphstyle=\ttb\color{deepred},    % Custom highlighting style
+stringstyle=\color{deepgreen},
+%frame=tb,                         % Any extra options here
+showstringspaces=false            %
+}}
+
+% Python environment
+\lstnewenvironment{python}[1][]
+{
+\pythonstyle
+\lstset{#1}
+}
+{}
+
+% Python for external files
+\newcommand\pythonexternal[2][]{{
+\pythonstyle
+\lstinputlisting[#1]{#2}}}
+
+% Python for inline
+\newcommand\pycode[1]{{\pythonstyle\lstinline!#1!}}
+
+% Solution environment
+\definecolor{lightgray}{gray}{0.95}
+\newmdenv[linecolor=white,backgroundcolor=lightgray,frametitle=Solution:]{solution}
+
+\begin{document}
+
+\title{Introduction to Machine Learning\\
+Problems: Principal Component Analysis (with Solutions)}
+\author{Profs. Sundeep Rangan and Yao Wang}
+\date{}
+
+\maketitle
+
+\begin{enumerate}
+
+\item Assume that you have 4 samples each with dimension 3, described in the data matrix $X$,
+\[
+    X = \left[ \begin{array}{ccc}
+        3 & 2 & 1 \\
+        2 & 4 & 5 \\
+        1 & 2 &3 \\
+        0 & 2 &5 \\
+          \end{array} \right] \quad
+ \]
+ For the problems below, you may do the calculations in python.  Describe the commands
+ you used.
+ \begin{enumerate}
+ \item Find the sample mean.
+ \item Find the sample covariance matrix $Q$.
+ \item Find the eigenvalues and eigenvectors. You can use the 
+ \pycode{numpy.linalg.eig} to compute eigenvalues and eigenvectors from $Q$.
+ \item Find the PCA coefficients corresponding to samples in $X$.
+ \item Reconstruct the original samples from the PCA coefficients.
+ \item Approximate the samples using principle components corresponding to the two largest eigenvalues.
+ \item Verify the sum of reconstruction error squares = sum of squares of skipped PCA coefficients.
+ \end{enumerate}
+
+\begin{solution}
+\begin{enumerate}
+\item The sample mean is computed as:
+\begin{python}
+import numpy as np
+X = np.array([[3, 2, 1], [2, 4, 5], [1, 2, 3], [0, 2, 5]])
+mu = np.mean(X, axis=0)
+\end{python}
+The mean is $\mubf = [1.5, 2.5, 3.5]$.
+
+\item The sample covariance matrix is computed as:
+\begin{python}
+X_centered = X - mu
+Q = np.cov(X_centered.T)
+# Or equivalently: Q = (1/(n-1)) * X_centered.T @ X_centered
+\end{python}
+The covariance matrix is:
+\[
+Q = \left[ \begin{array}{ccc}
+    2.0 & 0.0 & -1.0 \\
+    0.0 & 1.0 & 0.0 \\
+    -1.0 & 0.0 & 2.0
+\end{array} \right]
+\]
+
+\item Eigenvalues and eigenvectors:
+\begin{python}
+eigenvals, eigenvecs = np.linalg.eig(Q)
+# Sort by eigenvalues in descending order
+idx = eigenvals.argsort()[::-1]
+eigenvals = eigenvals[idx]
+eigenvecs = eigenvecs[:, idx]
+\end{python}
+The eigenvalues are approximately $\lambda_1 = 3.0$, $\lambda_2 = 2.0$, $\lambda_3 = 0.0$.
+The corresponding eigenvectors (principal components) are the columns of the eigenvector matrix.
+
+\item PCA coefficients are computed by projecting centered data onto the principal components:
+\begin{python}
+V = eigenvecs  # Principal components (columns)
+Z = X_centered @ V  # PCA coefficients
+\end{python}
+Each row of $Z$ contains the PCA coefficients for the corresponding sample.
+
+\item Reconstruction from PCA coefficients:
+\begin{python}
+X_reconstructed = Z @ V.T + mu
+\end{python}
+This should recover the original $X$ exactly (within numerical precision).
+
+\item Approximation using two largest PCs:
+\begin{python}
+V2 = eigenvecs[:, :2]  # First two principal components
+Z2 = X_centered @ V2  # Coefficients for first two PCs
+X_approx = Z2 @ V2.T + mu  # Approximation
+\end{python}
+
+\item Verification:
+\begin{python}
+reconstruction_error = X - X_approx
+error_squared_sum = np.sum(reconstruction_error**2)
+
+skipped_coeffs = Z[:, 2:]  # Skipped PCA coefficients
+skipped_squared_sum = np.sum(skipped_coeffs**2)
+
+# These should be equal (or very close)
+\end{python}
+The sum of squares of reconstruction errors equals the sum of squares of the skipped PCA coefficients because the reconstruction error is exactly the projection onto the discarded principal components.
+\end{enumerate}
+\end{solution}
+ 
+\item \emph{PC bases.}  Suppose that the mean and first two PCs in a basis
+ are,
+\[
+    \mubf = [1,0,2], \quad \vbf_1 = \frac{1}{\sqrt{2}}[1,1,0], \quad
+    \vbf_2 = \frac{1}{\sqrt{2}}[1,-1,0], 
+\]
+\begin{enumerate}[(a)]
+  \item What are the two PC coefficients of the vector $\xbf=[2,3,4]$?
+  \item What is $\xbfhat$, the approximation of $\xbf$ using two PCs?
+  \item What is the approximation error $\|\xbf-\xbfhat\|^2$?
+\end{enumerate}
+
+\begin{solution}
+\begin{enumerate}[(a)]
+\item The PC coefficients are computed by projecting the centered vector onto the PCs:
+\[
+\xbf_{\text{centered}} = \xbf - \mubf = [2,3,4] - [1,0,2] = [1,3,2]
+\]
+The coefficients are:
+\begin{align*}
+z_1 &= \vbf_1^T (\xbf - \mubf) = \frac{1}{\sqrt{2}}[1,1,0]^T [1,3,2] = \frac{1}{\sqrt{2}}(1 + 3) = \frac{4}{\sqrt{2}} = 2\sqrt{2} \\
+z_2 &= \vbf_2^T (\xbf - \mubf) = \frac{1}{\sqrt{2}}[1,-1,0]^T [1,3,2] = \frac{1}{\sqrt{2}}(1 - 3) = \frac{-2}{\sqrt{2}} = -\sqrt{2}
+\end{align*}
+
+\item The approximation is:
+\[
+\xbfhat = \mubf + z_1 \vbf_1 + z_2 \vbf_2 = [1,0,2] + 2\sqrt{2} \cdot \frac{1}{\sqrt{2}}[1,1,0] + (-\sqrt{2}) \cdot \frac{1}{\sqrt{2}}[1,-1,0]
+\]
+\[
+= [1,0,2] + 2[1,1,0] - [1,-1,0] = [1,0,2] + [2,2,0] - [1,-1,0] = [2,3,2]
+\]
+
+\item The approximation error is:
+\[
+\|\xbf-\xbfhat\|^2 = \|[2,3,4] - [2,3,2]\|^2 = \|[0,0,2]\|^2 = 4
+\]
+Note that this error equals the square of the third (skipped) PC coefficient, which would be the projection onto the direction perpendicular to the first two PCs.
+\end{enumerate}
+\end{solution}
+
+\item \emph{Fitting data with PCs}.  You are given python functions
+for PCA transform and a binary classifier:
+\begin{python}
+    mu, V = PCA(X)  # Finds the mean and PCs for a data matrix X
+    
+    clf = Classifier()
+    clf.fit(Z,y)    # Fits a binary classifier from features Z and labels y
+    yhat = clf.predict(Z)  # Predicts labels from Z
+\end{python}
+Given a data matrix \pycode{X} with binary labels \pycode{y},
+you wish to build a classifier that uses a PCA transform followed by
+the \pycode{Classifier}.  Write python code that uses model validation
+to select the optimal number of PCA components to use.  You may assume:
+\begin{itemize}
+\item You use simple cross validation with one training and test split.
+Not You do not need to do $K$-fold validation.
+\item You should use roughly 25\% of the samples for test.  Data shuffling
+before splitting is not needed.
+\end{itemize}
+
+\begin{solution}
+\begin{python}
+n = len(X)
+n_test = int(0.25 * n)
+n_train = n - n_test
+
+# Split data
+X_train = X[:n_train]
+X_test = X[n_test:]
+y_train = y[:n_train]
+y_test = y[n_test:]
+
+# Find PCA on training data
+mu, V = PCA(X_train)
+
+# Try different numbers of components
+best_nc = 0
+best_acc = 0
+
+for nc in range(1, min(n_train, X.shape[1]) + 1):
+    # Transform training data
+    X_train_centered = X_train - mu
+    Z_train = X_train_centered @ V[:, :nc]
+    
+    # Fit classifier
+    clf = Classifier()
+    clf.fit(Z_train, y_train)
+    
+    # Transform test data
+    X_test_centered = X_test - mu
+    Z_test = X_test_centered @ V[:, :nc]
+    
+    # Predict and evaluate
+    yhat_test = clf.predict(Z_test)
+    acc = np.mean(yhat_test == y_test)
+    
+    if acc > best_acc:
+        best_acc = acc
+        best_nc = nc
+
+print(f"Best number of components: {best_nc}")
+\end{python}
+\end{solution}
+
+\item \emph{PC with images}.  A dataset has 1000 images of size 28 $\times$ 28,
+represented as python array \pycode{X} with shape \pycode{(1000,28,28)}.
+You are given the following python functions:
+\begin{python}
+    Y = reshape(X, shape)         # Reshapes X to a shape 
+    pca = PCA(n_components = nc)  # Creates a PCA object
+    pca.fit(Y)   # Finds the mean and PCs from training data Y
+    Z = pca.transform(Y)   # Find coefficients in the PC basis 
+    Yhat = pca.inverse_transform(Z)  # Invert the PC transform
+\end{python}
+Write a few lines of python code to (i) fit a PC model from the first 500 images
+with 5 components; 
+and (ii) create an array of approximations of the remaining 500 images.
+
+\begin{solution}
+\begin{python}
+# (i) Fit PCA model from first 500 images
+X_train = X[:500]
+X_train_flat = reshape(X_train, (500, 28*28))
+pca = PCA(n_components=5)
+pca.fit(X_train_flat)
+
+# (ii) Create approximations of remaining 500 images
+X_test = X[500:]
+X_test_flat = reshape(X_test, (500, 28*28))
+Z_test = pca.transform(X_test_flat)
+X_test_approx_flat = pca.inverse_transform(Z_test)
+X_test_approx = reshape(X_test_approx_flat, (500, 28, 28))
+\end{python}
+\end{solution}
+ 
+\item \emph{PCs using SVDs.}  You are given a python function:
+\begin{python}
+    U,s, Vtr = svd(Z, full_matrices = False)
+\end{python}
+which computes an ``economy" SVD.  Given a data matrix \pycode{X},
+write python code that:
+\begin{enumerate}[(i)]
+\item Finds the PCs and mean of the data.
+\item Finds the minimum number of PCs in order that the proportion of variance is
+at least 90\%.
+\item Create an approximation \pycode{Xhat} of \pycode{X} using the number of
+PCs in part (ii).
+\end{enumerate}
+
+\begin{solution}
+\begin{python}
+# (i) Find PCs and mean
+mu = np.mean(X, axis=0)
+X_centered = X - mu
+U, s, Vtr = svd(X_centered, full_matrices=False)
+# PCs are the columns of Vtr (or rows of Vtr.T)
+V = Vtr.T
+# Eigenvalues are s^2 / (n-1)
+eigenvals = s**2 / (len(X) - 1)
+
+# (ii) Find minimum number of PCs for 90% variance
+cumulative_var = np.cumsum(eigenvals) / np.sum(eigenvals)
+nc = np.argmax(cumulative_var >= 0.90) + 1
+
+# (iii) Create approximation
+Z = X_centered @ V[:, :nc]
+Xhat = Z @ V[:, :nc].T + mu
+\end{python}
+\end{solution}
+\end{enumerate}
+ 
+\end{document}
+
