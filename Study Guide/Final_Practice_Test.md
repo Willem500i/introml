@@ -282,7 +282,10 @@ $$\hat{\mathbf{x}} - \boldsymbol{\mu} = \sum_{j=1}^k z_j\mathbf{v}_j$$
 $$\mathbf{x} - \hat{\mathbf{x}} = \sum_{j=1}^d z_j\mathbf{v}_j - \sum_{j=1}^k z_j\mathbf{v}_j = \sum_{j=k+1}^d z_j\mathbf{v}_j$$
 
 **Step 4**: Compute squared norm using orthonormality
-$$\|\mathbf{x} - \hat{\mathbf{x}}\|^2 = \left\|\sum_{j=k+1}^d z_j\mathbf{v}_j\right\|^2 = \sum_{j=k+1}^d z_j^2 \cdot \|\mathbf{v}_j\|^2 = \sum_{j=k+1}^d z_j^2$$ ∎
+
+$$\|\mathbf{x} - \hat{\mathbf{x}}\|^2 = \left\|\sum_{j=k+1}^d z_j\mathbf{v}_j\right\|^2 = \sum_{j=k+1}^d z_j^2 \cdot \|\mathbf{v}_j\|^2 = \sum_{j=k+1}^d z_j^2$$
+
+∎
 </details>
 
 ---

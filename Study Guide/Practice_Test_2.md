@@ -295,7 +295,10 @@ $$-1 < 1 - \alpha b_2 < 1$$
 $$0 < \alpha < \frac{2}{b_2}$$
 
 Since $b_2 > b_1$, we have $\frac{2}{b_2} < \frac{2}{b_1}$, so the binding constraint is:
-$$0 < \alpha < \frac{2}{b_2}$$ ∎
+
+$$0 < \alpha < \frac{2}{b_2}$$
+
+∎
 
 (c) **Convergence rate**:
 With $\alpha = \frac{2}{b_1 + b_2}$:
@@ -305,7 +308,10 @@ $$\rho_1 = 1 - \frac{2b_1}{b_1 + b_2} = \frac{b_2 - b_1}{b_1 + b_2}$$
 $$\rho_2 = 1 - \frac{2b_2}{b_1 + b_2} = \frac{b_1 - b_2}{b_1 + b_2} = -\frac{b_2 - b_1}{b_1 + b_2}$$
 
 The convergence rate is determined by $\max(|\rho_1|, |\rho_2|)$:
-$$C = \frac{b_2 - b_1}{b_1 + b_2} = \frac{b_2/b_1 - 1}{b_2/b_1 + 1} = \frac{\kappa - 1}{\kappa + 1}$$ ∎
+
+$$C = \frac{b_2 - b_1}{b_1 + b_2} = \frac{b_2/b_1 - 1}{b_2/b_1 + 1} = \frac{\kappa - 1}{\kappa + 1}$$
+
+∎
 </details>
 
 ---

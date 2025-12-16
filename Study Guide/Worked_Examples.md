@@ -131,7 +131,10 @@ $$\phi_2(\mathbf{x}) = x_2 e^{-x_1-x_2}$$
 $$\boldsymbol{\beta} = \begin{pmatrix} a_1 \\ a_2 \end{pmatrix}$$
 
 **Step 4**: Verify
-$$\hat{y} = \beta_1 \phi_1 + \beta_2 \phi_2 = a_1 \cdot x_1 e^{-x_1-x_2} + a_2 \cdot x_2 e^{-x_1-x_2}$$ ✓
+
+$$\hat{y} = \beta_1 \phi_1 + \beta_2 \phi_2 = a_1 \cdot x_1 e^{-x_1-x_2} + a_2 \cdot x_2 e^{-x_1-x_2}$$
+
+This matches the original form. ✓
 
 **Recovery**: $a_1 = \beta_1$, $a_2 = \beta_2$
 
@@ -253,8 +256,8 @@ where $z_i = \beta_0 + \beta_1 x_{i1} + \beta_2 x_{i2} + \ldots$
 **Step 2**: Compute $\frac{\partial J}{\partial z_i}$
 $$\frac{\partial}{\partial z_i}[\ln(1+e^{z_i}) - y_i z_i] = \frac{e^{z_i}}{1+e^{z_i}} - y_i = \sigma(z_i) - y_i$$
 
-**Step 3**: Compute $\frac{\partial z_i}{\partial \beta_j}$
-$$\frac{\partial z_i}{\partial \beta_j} = x_{ij}$$ (or 1 if $j=0$)
+**Step 3**: Compute 
+$\frac{\partial z_i}{\partial \beta_j} = x_{ij}$ (or 1 if j = 0)
 
 **Step 4**: Apply chain rule
 $$\frac{\partial J}{\partial \beta_j} = \sum_i \frac{\partial J}{\partial z_i} \cdot \frac{\partial z_i}{\partial \beta_j} = \sum_i (\sigma(z_i) - y_i) x_{ij}$$

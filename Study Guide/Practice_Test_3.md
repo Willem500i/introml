@@ -279,7 +279,10 @@ $$= \sum_{j=k+1}^d \sum_{i=k+1}^d z_j z_i (\mathbf{v}_j^T \mathbf{v}_i)$$
 $$= \sum_{j=k+1}^d z_j^2$$
 
 Therefore:
-$$\boxed{\|\mathbf{x} - \hat{\mathbf{x}}\|^2 = \sum_{j=k+1}^d z_j^2}$$ ∎
+
+$$\boxed{\|\mathbf{x} - \hat{\mathbf{x}}\|^2 = \sum_{j=k+1}^d z_j^2}$$
+
+∎
 </details>
 
 ---

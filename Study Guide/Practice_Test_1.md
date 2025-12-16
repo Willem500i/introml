@@ -288,7 +288,10 @@ $$\sum_{i=1}^n x_i y_i - n\bar{x}\bar{y} = \beta_1 \left(\sum_{i=1}^n x_i^2 - n\
 - RHS: $\sum_i x_i^2 - n\bar{x}^2 = \sum_i (x_i - \bar{x})^2$
 
 Therefore:
-$$\hat{\beta}_1 = \frac{\sum_{i=1}^n (x_i - \bar{x})(y_i - \bar{y})}{\sum_{i=1}^n (x_i - \bar{x})^2}$$ ∎
+
+$$\hat{\beta}_1 = \frac{\sum_{i=1}^n (x_i - \bar{x})(y_i - \bar{y})}{\sum_{i=1}^n (x_i - \bar{x})^2}$$
+
+∎
 </details>
 
 ---
@@ -313,7 +316,10 @@ $$\frac{dRSS}{d\beta} = -2\sum_{i=1}^n x_i y_i + 2\beta \sum_{i=1}^n x_i^2$$
 **Step 4**: Set to zero and solve
 $$-2\sum_{i=1}^n x_i y_i + 2\beta \sum_{i=1}^n x_i^2 = 0$$
 $$\beta \sum_{i=1}^n x_i^2 = \sum_{i=1}^n x_i y_i$$
-$$\hat{\beta} = \frac{\sum_{i=1}^n x_i y_i}{\sum_{i=1}^n x_i^2}$$ ∎
+
+$$\hat{\beta} = \frac{\sum_{i=1}^n x_i y_i}{\sum_{i=1}^n x_i^2}$$
+
+∎
 
 **Step 5**: Verify it's a minimum
 $$\frac{d^2 RSS}{d\beta^2} = 2\sum_{i=1}^n x_i^2 > 0$$
@@ -365,7 +371,10 @@ Both conditions satisfied when $|y| \leq \lambda$.
 $$\hat{w} = \begin{cases} y - \lambda & y > \lambda \\ 0 & |y| \leq \lambda \\ y + \lambda & y < -\lambda \end{cases}$$
 
 This can be written compactly as:
-$$\hat{w} = \text{sign}(y) \max(|y| - \lambda, 0)$$ ∎
+
+$$\hat{w} = \text{sign}(y) \max(|y| - \lambda, 0)$$
+
+∎
 </details>
 
 ---
