@@ -1,17 +1,43 @@
-introml
-*/.DS_Store
-*/.ipynb_checkpoints
-/unit08_svm/data
-unit08_svm/data
-unit10_cnn/dataset
-unit10_cnn/dataset_temp
-unit10_cnn/test
-unit10_cnn/train
-.obsidian
-.obsidian_cache
-.obsidian_cache_temp
-.obsidian_cache_temp_temp
-.obsidian_cache_temp_temp_temp
-.obsidian_cache_temp_temp_temp_temp
-.obsidian_cache_temp_temp_temp_temp_temp
-.obsidian_cache_temp_temp_temp_temp_temp_temp
+# OS/IDE
+.DS_Store
+**/.ipynb_checkpoints
+.vscode/
+.idea/
+
+# Bytecode
+__pycache__/
+*.py[cod]
+
+# Envs
+venv/
+env/
+
+# Archives
+*.zip
+*.tar
+*.tar.gz
+*.gz
+
+# Images/videos at root (allow project asset dirs)
+*.jpg
+*.jpeg
+*.png
+*.gif
+*.bmp
+*.tiff
+*.mp4
+*.avi
+*.mov
+!project/presentation_assets/**
+!project/used_images/**
+!project/testing_images/**
+!project/testing_data/**
+!project/results_illegal_parking/**
+
+# Keep course/homework stuff ignored
+unit0*/
+hw0*/
+
+# Project data only
+project/data/
+vproject

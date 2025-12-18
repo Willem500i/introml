@@ -1,0 +1,1 @@
+To avoid lots of clutter in the main directory, I'm putting the testing data in a separate directory that is uploaded to the repo, the rest of the data is just saved locally.

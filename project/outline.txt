@@ -1,0 +1,62 @@
+Machine Learning Project Outline
+Vehicle-Curb Proximity Detection Using Computer Vision
+
+Team Member: Willem Neuefeind Lessig
+
+Project Abstract
+Problem: Detecting whether vehicles are positioned near road curbs (parked/parking) vs in 
+active traffic lanes is a useful preprocessing step for parking violation detection and 
+traffic analysis. This project develops a binary classifier that uses both spatial features 
+(vehicle-curb distance) and image-based features (CNN) to make this distinction.
+
+Dataset: I use the BDD100K driving dataset which contains 100,000 dashcam images with 
+annotations for vehicles (bounding boxes), lane markings, and road curbs (polygons). This 
+provides rich ground truth for computing vehicle-curb spatial relationships.
+
+Solution: My approach combines:
+1. Spatial feature extraction - computing normalized distance between vehicle bounding 
+   boxes and curb polygons, accounting for perspective via vehicle size normalization
+2. CNN-based classification - using transfer learning (ResNet18) on cropped vehicle 
+   images to learn visual patterns associated with parked vs moving vehicles
+3. Traditional ML baselines - Logistic Regression and SVM on extracted spatial features
+
+The binary classification labels are:
+- "near_curb" (label=1): Vehicle is within threshold distance of road curb
+- "in_lane" (label=0): Vehicle is positioned in traffic lane, away from curbs
+
+Evaluation: I measure classification accuracy, precision, recall, and F1-score for both 
+classes. Confusion matrices visualize model performance. The CNN model is compared against 
+traditional ML baselines to assess the value of image-based features vs pure spatial features.
+
+Milestones
+1. Feature Extraction & Labeling
+   - Extract vehicle bounding boxes and curb polygons from BDD100K annotations
+   - Compute vehicle-curb distances with perspective normalization
+   - Create binary labels based on distance threshold
+   
+2. Data Preprocessing
+   - Crop vehicle images from full scenes
+   - Resize and normalize for CNN input
+   - Create feature vectors for traditional ML
+
+3. Model Development
+   - Implement ResNet18 transfer learning for image classification
+   - Train Logistic Regression and SVM on spatial features
+   - Compare performance across model types
+
+4. Evaluation & Analysis
+   - Generate classification metrics (accuracy, precision, recall, F1)
+   - Create confusion matrices
+   - Analyze failure cases
+
+Extension: GradCAM Visualization
+   - Implement GradCAM to visualize CNN attention
+   - Identify which image regions influence classification
+   - Validate that model focuses on relevant features (curbs, vehicle position)
+
+References
+- Yu, F., et al. (2020). "BDD100K: A Diverse Driving Dataset for Heterogeneous Multitask 
+  Learning." CVPR 2020. https://www.bdd100k.com/
+- He, K., et al. (2016). "Deep Residual Learning for Image Recognition." CVPR 2016.
+- Selvaraju, R. R., et al. (2017). "Grad-CAM: Visual Explanations from Deep Networks via 
+  Gradient-based Localization." ICCV 2017.

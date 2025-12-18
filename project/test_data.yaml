@@ -1,0 +1,9 @@
+# Minimal data config to validate the included val split (150 imgs, 75 pos / 75 neg)
+path: .
+val: testing_data/full_val/images
+test: testing_data/full_val/images
+train: testing_data/full_val/images  # not used for training here, just to satisfy YOLO config
+
+nc: 1
+names: ["illegal parking"]
+
